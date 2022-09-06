@@ -13,17 +13,12 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QListView" name="listView">
-   <property name="geometry">
-    <rect>
-     <x>170</x>
-     <y>120</y>
-     <width>231</width>
-     <height>551</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="pushButton">
+  <property name="styleSheet">
+   <string notr="true">QDialog {
+background-color: '#0d3d4c';
+}</string>
+  </property>
+  <widget class="QPushButton" name="muteBtn">
    <property name="geometry">
     <rect>
      <x>30</x>
@@ -32,11 +27,23 @@
      <height>61</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	border: 5px solid '#101014';
+	font: 700 17pt &quot;Yu Gothic UI&quot;;
+	letter-spacing: 1px;
+	color: '#e3e3e3';
+}
+
+QPushButton::hover {
+	background-color: '#0c2f3a';
+}</string>
+   </property>
    <property name="text">
     <string>Mute</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_2">
+  <widget class="QPushButton" name="kickBtn">
    <property name="geometry">
     <rect>
      <x>30</x>
@@ -45,11 +52,23 @@
      <height>61</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	border: 5px solid '#101014';
+	font: 700 17pt &quot;Yu Gothic UI&quot;;
+	letter-spacing: 1px;
+	color: '#e3e3e3';
+}
+
+QPushButton::hover {
+	background-color: '#0c2f3a';
+}</string>
+   </property>
    <property name="text">
     <string>Kick</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_3">
+  <widget class="QPushButton" name="banBtn">
    <property name="geometry">
     <rect>
      <x>30</x>
@@ -58,11 +77,23 @@
      <height>61</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	border: 5px solid '#101014';
+	font: 700 17pt &quot;Yu Gothic UI&quot;;
+	letter-spacing: 1px;
+	color: '#e3e3e3';
+}
+
+QPushButton::hover {
+	background-color: '#0c2f3a';
+}</string>
+   </property>
    <property name="text">
     <string>Ban</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_4">
+  <widget class="QPushButton" name="muteListBtn">
    <property name="geometry">
     <rect>
      <x>1160</x>
@@ -71,11 +102,23 @@
      <height>61</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	border: 5px solid '#101014';
+	font: 700 16pt &quot;Yu Gothic UI&quot;;
+	letter-spacing: 1px;
+	color: '#e3e3e3';
+}
+
+QPushButton::hover {
+	background-color: '#0c2f3a';
+}</string>
+   </property>
    <property name="text">
     <string>Mute List</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_5">
+  <widget class="QPushButton" name="kickListBtn">
    <property name="geometry">
     <rect>
      <x>1160</x>
@@ -84,37 +127,46 @@
      <height>61</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	border: 5px solid '#101014';
+	font: 700 16pt &quot;Yu Gothic UI&quot;;
+	letter-spacing: 1px;
+	color: '#e3e3e3';
+}
+
+QPushButton::hover {
+	background-color: '#0c2f3a';
+}</string>
+   </property>
    <property name="text">
     <string>Kick List</string>
-   </property>
-  </widget>
-  <widget class="QListView" name="listView_2">
-   <property name="geometry">
-    <rect>
-     <x>440</x>
-     <y>120</y>
-     <width>681</width>
-     <height>501</height>
-    </rect>
    </property>
   </widget>
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
      <x>30</x>
-     <y>20</y>
-     <width>171</width>
-     <height>51</height>
+     <y>28</y>
+     <width>91</width>
+     <height>31</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">QLabel {
+	font: 700 20pt &quot;Yu Gothic UI&quot;;
+	letter-spacing: 1.5px;
+	color: '#e3e3e3';
+}</string>
+   </property>
    <property name="text">
-    <string>Status</string>
+    <string>Open</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_6">
+  <widget class="QPushButton" name="banListBtn">
    <property name="geometry">
     <rect>
      <x>1160</x>
@@ -123,11 +175,23 @@
      <height>61</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	border: 5px solid '#101014';
+	font: 700 16pt &quot;Yu Gothic UI&quot;;
+	letter-spacing: 1px;
+	color: '#e3e3e3';
+}
+
+QPushButton::hover {
+	background-color: '#0c2f3a';
+}</string>
+   </property>
    <property name="text">
     <string>Ban List</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_7">
+  <widget class="QPushButton" name="blackWordsBtn">
    <property name="geometry">
     <rect>
      <x>1160</x>
@@ -136,11 +200,23 @@
      <height>61</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	border: 5px solid '#101014';
+	font: 700 15pt &quot;Yu Gothic UI&quot;;
+	color: '#e3e3e3';
+	letter-spacing: 1px;
+}
+
+QPushButton::hover {
+	background-color: '#0c2f3a';
+}</string>
+   </property>
    <property name="text">
-    <string>Black Words</string>
+    <string>Words List</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_8">
+  <widget class="QPushButton" name="infoBtn">
    <property name="geometry">
     <rect>
      <x>1050</x>
@@ -149,11 +225,23 @@
      <height>51</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	border: 5px solid '#101014';
+	font: 700 17pt &quot;Yu Gothic UI&quot;;
+	letter-spacing: 1px;
+	color: '#e3e3e3';
+}
+
+QPushButton::hover {
+	background-color: '#0c2f3a';
+}</string>
+   </property>
    <property name="text">
     <string>Info</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="lineEdit">
+  <widget class="QLineEdit" name="searchUserBox">
    <property name="geometry">
     <rect>
      <x>320</x>
@@ -162,11 +250,25 @@
      <height>51</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">QLineEdit {
+	border: 5px solid '#101014';
+	font: 700 14pt &quot;Yu Gothic UI&quot;;
+	letter-spacing: 2px;
+	color: '#e3e3e3';
+	background-color: '#0d3d4c';
+	padding-left: 13px;
+}
+
+QLineEdit::hover {
+	background-color: '#0c2f3a';
+}</string>
+   </property>
    <property name="placeholderText">
     <string>Search User</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_9">
+  <widget class="QPushButton" name="searchBtn">
    <property name="geometry">
     <rect>
      <x>730</x>
@@ -175,11 +277,23 @@
      <height>51</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	border: 5px solid '#101014';
+	font: 700 17pt &quot;Yu Gothic UI&quot;;
+	letter-spacing: 1px;
+	color: '#e3e3e3';
+}
+
+QPushButton::hover {
+	background-color: '#0c2f3a';
+}</string>
+   </property>
    <property name="text">
     <string>Search</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_10">
+  <widget class="QPushButton" name="resetSearchBtn">
    <property name="geometry">
     <rect>
      <x>880</x>
@@ -188,11 +302,23 @@
      <height>51</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	border: 5px solid '#101014';
+	font: 700 17pt &quot;Yu Gothic UI&quot;;
+	letter-spacing: 1px;
+	color: '#e3e3e3';
+}
+
+QPushButton::hover {
+	background-color: '#0c2f3a';
+}</string>
+   </property>
    <property name="text">
     <string>Reset</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_11">
+  <widget class="QPushButton" name="optionsBtn">
    <property name="geometry">
     <rect>
      <x>1180</x>
@@ -201,50 +327,100 @@
      <height>51</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	border: 5px solid '#101014';
+	font: 700 17pt &quot;Yu Gothic UI&quot;;
+	letter-spacing: 1px;
+	color: '#e3e3e3';
+}
+
+QPushButton::hover {
+	background-color: '#0c2f3a';
+}</string>
+   </property>
    <property name="text">
     <string>Options</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="lineEdit_2">
+  <widget class="QLineEdit" name="messageBox">
    <property name="geometry">
     <rect>
-     <x>460</x>
+     <x>440</x>
      <y>630</y>
      <width>371</width>
      <height>41</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">QLineEdit {
+	border: 4px solid '#101014';
+	font: 700 12pt &quot;Yu Gothic UI&quot;;
+	letter-spacing: 2px;
+	color: '#e3e3e3';
+	background-color: '#0d3d4c';
+	padding-left: 13px;
+}
+
+QLineEdit::hover {
+	background-color: '#0c2f3a';
+}</string>
+   </property>
    <property name="placeholderText">
     <string>Send Message</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_12">
+  <widget class="QPushButton" name="sendMsgBtn">
    <property name="geometry">
     <rect>
-     <x>850</x>
+     <x>840</x>
      <y>630</y>
      <width>111</width>
      <height>41</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	border: 4px solid '#101014';
+	font: 700 17pt &quot;Yu Gothic UI&quot;;
+	letter-spacing: 1px;
+	color: '#e3e3e3';
+}
+
+QPushButton::hover {
+	background-color: '#0c2f3a';
+}</string>
    </property>
    <property name="text">
     <string>Send</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_13">
+  <widget class="QPushButton" name="resetMsgBtn">
    <property name="geometry">
     <rect>
-     <x>990</x>
+     <x>980</x>
      <y>630</y>
      <width>111</width>
      <height>41</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	border: 4px solid '#101014';
+	font: 700 17pt &quot;Yu Gothic UI&quot;;
+	letter-spacing: 1px;
+	color: '#e3e3e3';
+}
+
+QPushButton::hover {
+	background-color: '#0c2f3a';
+}</string>
+   </property>
    <property name="text">
     <string>Reset</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_14">
+  <widget class="QPushButton" name="addRoleBtn">
    <property name="geometry">
     <rect>
      <x>30</x>
@@ -253,11 +429,23 @@
      <height>61</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	border: 5px solid '#101014';
+	font: 700 16pt &quot;Yu Gothic UI&quot;;
+	letter-spacing: 1px;
+	color: '#e3e3e3';
+}
+
+QPushButton::hover {
+	background-color: '#0c2f3a';
+}</string>
+   </property>
    <property name="text">
     <string>Add Role</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_15">
+  <widget class="QPushButton" name="infoUsrBtn">
    <property name="geometry">
     <rect>
      <x>30</x>
@@ -266,8 +454,105 @@
      <height>61</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	border: 5px solid '#101014';
+	font: 700 16pt &quot;Yu Gothic UI&quot;;
+	letter-spacing: 1px;
+	color: '#e3e3e3';
+}
+
+QPushButton::hover {
+	background-color: '#0c2f3a';
+}</string>
+   </property>
    <property name="text">
     <string>Info User</string>
+   </property>
+  </widget>
+  <widget class="QPlainTextEdit" name="chatBox">
+   <property name="geometry">
+    <rect>
+     <x>420</x>
+     <y>120</y>
+     <width>681</width>
+     <height>501</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPlainTextEdit {
+	border: 6px solid '#101014';
+	font: 700 14pt &quot;Yu Gothic UI&quot;;
+	color: '#e3e3e3';
+	background-color: '#0d3d4c';
+}
+</string>
+   </property>
+  </widget>
+  <widget class="QTableView" name="userTable">
+   <property name="geometry">
+    <rect>
+     <x>180</x>
+     <y>120</y>
+     <width>221</width>
+     <height>501</height>
+    </rect>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::ClickFocus</enum>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QTableView {
+background-color: '#0d3d4c';
+border: 6px solid  '#101014';
+gridline-color:  '#1a1818';
+selection-background-color: rgb(84, 13, 43);
+letter-spacing: 1.1px;
+font: 700 15pt &quot;Yu Gothic UI&quot;;
+}
+QHeaderView::section {
+border-color:  '#101014';
+color: '#e3e3e3';
+font: 700 19pt &quot;Yu Gothic UI&quot;;
+background-color: '#0d3d4c';
+height: 65px;
+}
+
+QTableView::item{
+background-color: '#0d3d4c';
+color: '#e3e3e3';
+font: 700 15pt &quot;Yu Gothic UI&quot;;
+}
+
+QTableView::item:selected {
+background-color: rgb(102, 16, 53);
+}</string>
+   </property>
+   <property name="editTriggers">
+    <set>QAbstractItemView::NoEditTriggers</set>
+   </property>
+   <property name="gridStyle">
+    <enum>Qt::SolidLine</enum>
+   </property>
+  </widget>
+  <widget class="QLabel" name="statusLabel">
+   <property name="geometry">
+    <rect>
+     <x>125</x>
+     <y>30</y>
+     <width>61</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLabel {
+	
+	background-color: rgb(125, 0, 0);
+	border-radius: 5px;
+}</string>
+   </property>
+   <property name="text">
+    <string/>
    </property>
   </widget>
  </widget>
