@@ -4,8 +4,6 @@
 #include <QDialog>
 #include <boost/asio.hpp>
 
-void testListening(boost::asio::ip::tcp::acceptor& acceptor, boost::asio::ip::tcp::socket& socket_server);
-
 namespace Ui {
 class IpPortDialog;
 }

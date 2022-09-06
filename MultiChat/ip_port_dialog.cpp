@@ -13,16 +13,6 @@ int IpPortDialog::port;
 
 std::string IpPortDialog::ipAddress;
 
-void testListening(boost::asio::ip::tcp::acceptor& acceptor, boost::asio::ip::tcp::socket& socket_server) {
-    try {
-        acceptor.accept(socket_server);
-    }
-    catch(boost::wrapexcept<boost::system::system_error>) {
-        std::terminate();
-        return;
-    }
-}
-
 IpPortDialog::IpPortDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::IpPortDialog) {
