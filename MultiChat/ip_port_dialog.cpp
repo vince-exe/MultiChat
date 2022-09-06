@@ -13,6 +13,8 @@ int IpPortDialog::port;
 
 std::string IpPortDialog::ipAddress;
 
+bool IpPortDialog::enterAsServer;
+
 IpPortDialog::IpPortDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::IpPortDialog) {
@@ -60,14 +62,12 @@ void IpPortDialog::on_doneBtn_clicked() {
     IpPortDialog::port = ui->portLineEdit->text().toInt();
     IpPortDialog::ipAddress = ui->ipLineEdit->text().toStdString();
 
-    /* Server Side */
-    if(MainDialog::enterAsServer) {
-        ;
+    if(IpPortDialog::enterAsServer) {
+        IpPortDialog::doneBtnPressed = true;
     }
-    /* Client Side */
     else {
-        ;
+        /* check the connection */
     }
 
-    return;
+    this->close(); return;
 }

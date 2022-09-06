@@ -12,18 +12,21 @@ CONFIG += static
 SOURCES += \
     ip_port_dialog.cpp \
     main.cpp \
-    main_dialog.cpp
+    main_dialog.cpp \
+    server_side_dialog.cpp
 
 HEADERS += \
     ip_port_dialog.h \
-    main_dialog.h
+    main_dialog.h \
+    server_side_dialog.h
 
 FORMS += \
     ip_port_dialog.ui \
-    main_dialog.ui
+    main_dialog.ui \
+    server_side_dialog.ui
 
-INCLUDEPATH += D:/Programs/C++Libraries/boost_1_80_0
-LIBS += -LD:/Programs/C++Libraries/boost_1_80_0/stage/lib
+INCLUDEPATH += C:/Users/Vincenzo/OneDrive/Documenti/C++Libraries/boost_1_80_0
+LIBS += -LC:/Users/Vincenzo/OneDrive/Documenti/C++Libraries/boost_1_80_0/stage/lib
 LIBS += -llibboost_filesystem-mgw6-mt-x32-1_80 -lws2_32
 
 # Default rules for deployment.

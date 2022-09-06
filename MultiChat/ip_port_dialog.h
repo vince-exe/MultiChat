@@ -25,6 +25,8 @@ public:
 
     static bool doneBtnPressed;
 
+    static bool enterAsServer;
+
     ~IpPortDialog();
 
 private slots:

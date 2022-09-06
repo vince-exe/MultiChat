@@ -3,8 +3,7 @@
 
 /* forms */
 #include "ip_port_dialog.h"
-
-bool MainDialog::enterAsServer = false;
+#include "server_side_dialog.h"
 
 MainDialog::MainDialog(QWidget *parent)
     : QDialog(parent)
@@ -27,19 +26,25 @@ MainDialog::~MainDialog() {
 }
 
 void MainDialog::on_createBtn_clicked() {
+    IpPortDialog::enterAsServer = true;
     IpPortDialog ipPortDialog;
-    MainDialog::enterAsServer = true;
 
     ipPortDialog.setModal(true);
     ipPortDialog.show();
     ipPortDialog.exec();
 
     if(!IpPortDialog::doneBtnPressed) { return; }
+
+    ServerSideDialog serverSideDialog;
+
+    serverSideDialog.setModal(true);
+    serverSideDialog.show();
+    serverSideDialog.exec();
 }
 
 void MainDialog::on_connectBtn_clicked() {
+    IpPortDialog::enterAsServer = false;
     IpPortDialog ipPortDialog;
-    MainDialog::enterAsServer = false;
 
     ipPortDialog.setModal(true);
     ipPortDialog.show();
