@@ -13,11 +13,13 @@ SOURCES += \
     ip_port_dialog.cpp \
     main.cpp \
     main_dialog.cpp \
+    server.cpp \
     server_side_dialog.cpp
 
 HEADERS += \
     ip_port_dialog.h \
     main_dialog.h \
+    server.h \
     server_side_dialog.h
 
 FORMS += \
