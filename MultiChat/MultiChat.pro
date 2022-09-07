@@ -10,6 +10,7 @@ CONFIG += static
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    chat_utilities.cpp \
     ip_port_dialog.cpp \
     main.cpp \
     main_dialog.cpp \
@@ -17,6 +18,7 @@ SOURCES += \
     server_side_dialog.cpp
 
 HEADERS += \
+    chat_utilities.h \
     ip_port_dialog.h \
     main_dialog.h \
     server.h \

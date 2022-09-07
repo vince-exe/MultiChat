@@ -495,7 +495,7 @@ QPushButton::hover {
      <x>180</x>
      <y>120</y>
      <width>221</width>
-     <height>501</height>
+     <height>551</height>
     </rect>
    </property>
    <property name="focusPolicy">
@@ -553,6 +553,19 @@ background-color: rgb(102, 16, 53);
    </property>
    <property name="text">
     <string/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton">
+   <property name="geometry">
+    <rect>
+     <x>70</x>
+     <y>70</y>
+     <width>80</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Start</string>
    </property>
   </widget>
  </widget>

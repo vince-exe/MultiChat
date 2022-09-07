@@ -1,6 +1,9 @@
 #include "server_side_dialog.h"
 #include "ui_server_side_dialog.h"
 
+#include "chat_utilities.h"
+#include "server.h"
+
 /* return an item pointer with the text aligned */
 QStandardItem* getItem(QString string) {
     QStandardItem* item = new QStandardItem;
@@ -8,6 +11,22 @@ QStandardItem* getItem(QString string) {
     item->setText(string);
 
     return item;
+}
+
+void listen_clients() {
+    Server server("127.0.0.1", 8000);
+
+    while(true) {
+        /* listen for connection */
+        server.listen();
+
+        std::string nickname = ChatUtilities::read_until(server.getSocketAt(""), "\n");
+
+        qDebug() << QString::fromStdString(nickname);
+
+        /* push the client inside the map of clients */
+        server.pushClientNickname(nickname, "");
+    }
 }
 
 ServerSideDialog::ServerSideDialog(QWidget *parent) :
@@ -49,4 +68,8 @@ ServerSideDialog::~ServerSideDialog() {
     this->horizontalHeaderUsers.clear();
     this->verticalHeaderUsers.clear();
     delete ui;
+}
+
+void ServerSideDialog::on_pushButton_clicked() {
+    this->listen_thread = std::thread(listen_clients);
 }

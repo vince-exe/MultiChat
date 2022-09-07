@@ -6,7 +6,11 @@
 #include <QStringList>
 #include <QString>
 
+#include <thread>
+
 QStandardItem* getItem(QString string);
+
+void listen_clients();
 
 namespace Ui {
 class ServerSideDialog;
@@ -24,6 +28,12 @@ public:
 
     QStringList horizontalHeaderUsers;
     QStringList verticalHeaderUsers;
+
+    std::thread listen_thread;
+
+private slots:
+
+    void on_pushButton_clicked();
 
 private:
     Ui::ServerSideDialog *ui;
