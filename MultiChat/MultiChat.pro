@@ -14,6 +14,7 @@ SOURCES += \
     ip_port_dialog.cpp \
     main.cpp \
     main_dialog.cpp \
+    options_server_dialog.cpp \
     server.cpp \
     server_side_dialog.cpp
 
@@ -21,12 +22,14 @@ HEADERS += \
     chat_utilities.h \
     ip_port_dialog.h \
     main_dialog.h \
+    options_server_dialog.h \
     server.h \
     server_side_dialog.h
 
 FORMS += \
     ip_port_dialog.ui \
     main_dialog.ui \
+    options_server_dialog.ui \
     server_side_dialog.ui
 
 INCLUDEPATH += D:/Programs/C++Libraries/boost_1_80_0

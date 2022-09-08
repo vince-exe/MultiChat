@@ -10,7 +10,7 @@
 
 QStandardItem* getItem(QString string);
 
-void listen_clients();
+void listen_clients(std::string ip, int port);
 
 namespace Ui {
 class ServerSideDialog;
@@ -31,9 +31,10 @@ public:
 
     std::thread listen_thread;
 
-private slots:
+    static bool isServerOpen;
 
-    void on_pushButton_clicked();
+private slots:
+    void on_optionsBtn_clicked();
 
 private:
     Ui::ServerSideDialog *ui;

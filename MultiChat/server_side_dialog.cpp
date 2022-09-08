@@ -4,6 +4,12 @@
 #include "chat_utilities.h"
 #include "server.h"
 
+/* forms */
+#include "options_server_dialog.h"
+#include "ip_port_dialog.h"
+
+bool ServerSideDialog::isServerOpen = false;
+
 /* return an item pointer with the text aligned */
 QStandardItem* getItem(QString string) {
     QStandardItem* item = new QStandardItem;
@@ -13,8 +19,9 @@ QStandardItem* getItem(QString string) {
     return item;
 }
 
-void listen_clients() {
-    Server server("127.0.0.1", 8000);
+void listen_clients(std::string ip, int port) {
+    /* open the server at the given ip and port */
+    Server server(ip, port);
 
     while(true) {
         /* listen for connection */
@@ -59,6 +66,8 @@ ServerSideDialog::ServerSideDialog(QWidget *parent) :
     ui->userTable->verticalHeader()->setDefaultSectionSize(55);
 
     ui->userTable->setModel(this->modelUsers);
+
+    ServerSideDialog::isServerOpen = false;
 }
 
 ServerSideDialog::~ServerSideDialog() {
@@ -70,6 +79,20 @@ ServerSideDialog::~ServerSideDialog() {
     delete ui;
 }
 
-void ServerSideDialog::on_pushButton_clicked() {
-    this->listen_thread = std::thread(listen_clients);
+/* Options Button */
+void ServerSideDialog::on_optionsBtn_clicked() {
+    OptionsServerDialog optServerDialog;
+    optServerDialog.setModal(true);
+    optServerDialog.show();
+    optServerDialog.exec();
+
+    /* if the user wants to open the server */
+    if(OptionsServerDialog::serverOpened) {
+        ServerSideDialog::isServerOpen = true;
+
+        /* create the thread to listen the clients */
+        this->listen_thread = std::thread(listen_clients, IpPortDialog::ipAddress, IpPortDialog::port);
+        ui->statusLabel->setStyleSheet("background-color: rgb(6, 86, 1);");
+        return;
+    }
 }

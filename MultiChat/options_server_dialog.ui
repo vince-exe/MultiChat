@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>OptionsServerDialog</class>
+ <widget class="QDialog" name="OptionsServerDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>299</width>
+    <height>240</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QDialog {
+	background-color: '#0d3d4c';
+}</string>
+  </property>
+  <widget class="QLabel" name="titleLabel">
+   <property name="geometry">
+    <rect>
+     <x>40</x>
+     <y>10</y>
+     <width>221</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLabel {
+	font: 700 30pt &quot;Yu Gothic UI&quot;;
+	letter-spacing: 1px;
+	color: '#e3e3e3';
+}</string>
+   </property>
+   <property name="text">
+    <string>Multi Chat</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lineLabel">
+   <property name="geometry">
+    <rect>
+     <x>50</x>
+     <y>60</y>
+     <width>201</width>
+     <height>4</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLabel {
+	background-color: '#101014';
+	border-radius: 2px;
+}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="startServerBtn">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>90</y>
+     <width>121</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	border: 4px solid '#101014';
+	font: 700 11pt &quot;Yu Gothic UI&quot;;
+	letter-spacing: 1px;
+	color: '#e3e3e3';
+}
+
+QPushButton::hover {
+	background-color: '#0c2f3a';
+}</string>
+   </property>
+   <property name="text">
+    <string>Start Server</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="closeServerBtn">
+   <property name="geometry">
+    <rect>
+     <x>160</x>
+     <y>90</y>
+     <width>121</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	border: 4px solid '#101014';
+	font: 700 11pt &quot;Yu Gothic UI&quot;;
+	letter-spacing: 1px;
+	color: '#e3e3e3';
+}
+
+QPushButton::hover {
+	background-color: '#0c2f3a';
+}</string>
+   </property>
+   <property name="text">
+    <string>Close Server</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="backupChatBtn">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>170</y>
+     <width>121</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	border: 4px solid '#101014';
+	font: 700 11pt &quot;Yu Gothic UI&quot;;
+	letter-spacing: 1px;
+	color: '#e3e3e3';
+}
+
+QPushButton::hover {
+	background-color: '#0c2f3a';
+}</string>
+   </property>
+   <property name="text">
+    <string>Backup Chat</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="backupUsersBtn">
+   <property name="geometry">
+    <rect>
+     <x>160</x>
+     <y>170</y>
+     <width>121</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	border: 4px solid '#101014';
+	font: 700 11pt &quot;Yu Gothic UI&quot;;
+	letter-spacing: 1px;
+	color: '#e3e3e3';
+}
+
+QPushButton::hover {
+	background-color: '#0c2f3a';
+}</string>
+   </property>
+   <property name="text">
+    <string>Backup Users</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

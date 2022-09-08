@@ -15,7 +15,7 @@
   </property>
   <property name="styleSheet">
    <string notr="true">QDialog {
-background-color: '#0d3d4c';
+	background-color: '#0d3d4c';
 }</string>
   </property>
   <widget class="QPushButton" name="muteBtn">
@@ -143,7 +143,7 @@ QPushButton::hover {
     <string>Kick List</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label">
+  <widget class="QLabel" name="openLabel">
    <property name="geometry">
     <rect>
      <x>30</x>
@@ -546,26 +546,12 @@ background-color: rgb(102, 16, 53);
    </property>
    <property name="styleSheet">
     <string notr="true">QLabel {
-	
 	background-color: rgb(125, 0, 0);
 	border-radius: 5px;
 }</string>
    </property>
    <property name="text">
     <string/>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="pushButton">
-   <property name="geometry">
-    <rect>
-     <x>70</x>
-     <y>70</y>
-     <width>80</width>
-     <height>24</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Start</string>
    </property>
   </widget>
  </widget>
