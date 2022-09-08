@@ -5,6 +5,7 @@
 #include <QStandardItemModel>
 #include <QStringList>
 #include <QString>
+#include <QTableView>
 
 #include <thread>
 
@@ -41,6 +42,12 @@ public:
 private slots:
     void on_optionsBtn_clicked();
 
+    void on_searchBtn_clicked();
+
+    void on_resetSearchBtn_clicked();
+
+    void on_searchUserBox_textChanged(const QString &arg1);
+
 private:
 
 };
@@ -49,6 +56,10 @@ private:
 void acceptClients(std::string ip, int port, ServerSideDialog* objcet);
 
 /* listen the messages of a single client */
-void listenClient(const std::string& nickname, Server& server);
+void listenClient(const std::string nickname, Server& server, ServerSideDialog* object);
+
+void printClientList(QStandardItemModel* model, std::unordered_map<std::string, boost::asio::ip::tcp::socket*> map, QTableView* table);
+
+void printSearchedClients(const std::string& clientSearched, QStandardItemModel* model, std::unordered_map<std::string, boost::asio::ip::tcp::socket*> map, QTableView* table);
 
 #endif // SERVER_SIDE_DIALOG_H

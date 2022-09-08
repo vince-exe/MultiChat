@@ -19,6 +19,29 @@ QStandardItem* getItem(QString string) {
     return item;
 }
 
+
+void printClientList(QStandardItemModel* model, std::unordered_map<std::string, boost::asio::ip::tcp::socket*> map, QTableView* table) {
+    int i = 0;
+    for(auto&it : map) {
+        if(it.first.length()) {
+            model->setItem(i, getItem(QString::fromStdString(it.first)));
+            i++;
+        }
+    }
+    table->setModel(model);
+}
+
+void printSearchedClients(const std::string &clientSearched, QStandardItemModel *model, std::unordered_map<std::string, boost::asio::ip::tcp::socket*> map, QTableView *table) {
+    int i = 0;
+    for(auto& it : map) {
+        if(it.first == clientSearched) {
+            model->setItem(i, getItem(QString::fromStdString(clientSearched)));
+            i++;
+        }
+    }
+    table->setModel(model);
+}
+
 void acceptClients(std::string ip, int port, ServerSideDialog* object) {
     /* open the server at the given ip and port */
     Server server(ip, port);
@@ -50,12 +73,12 @@ void acceptClients(std::string ip, int port, ServerSideDialog* object) {
         object->ui->userTable->setModel(object->modelUsers);
 
         /* start the thread to listen the connected client */
-        object->listenClientsThreads.push_back(std::thread(listenClient, std::ref(nickname), std::ref(server)));
+        object->listenClientsThreads.push_back(std::thread(listenClient, nickname, std::ref(server), object));
         indexClient++;
     }
 }
 
-void listenClient(const std::string& nickname, Server& server) {
+void listenClient(const std::string nickname, Server& server, ServerSideDialog* object) {
     /* get the client socket */
     boost::asio::ip::tcp::socket* socketClient = server.getSocketAt(nickname);
     std::string message;
@@ -63,7 +86,12 @@ void listenClient(const std::string& nickname, Server& server) {
     while(true) {
         /* read the content */
         message = ChatUtilities::read_until(socketClient, ChatMessages::termCharacter);
-        qDebug() << QString::fromStdString(message);
+        message.resize(message.size() - 1);
+
+        /* display the content to the screen */
+        QTextCursor textCursor = QTextCursor(object->ui->chatBox->document());
+        textCursor.movePosition(QTextCursor::End);
+        textCursor.insertText("[ " + QString::fromStdString(nickname) + " ]: " + QString::fromStdString(message) + "\n");
     }
 }
 
@@ -127,3 +155,21 @@ void ServerSideDialog::on_optionsBtn_clicked() {
         return;
     }
 }
+
+/* Search Client Button */
+void ServerSideDialog::on_searchBtn_clicked() {
+    printSearchedClients(ui->searchUserBox->text().toStdString(), this->searchModelUsers, Server::getClientList(), ui->userTable);
+    ui->searchUserBox->clear();
+}
+
+/* Reset Client Table Button */
+void ServerSideDialog::on_resetSearchBtn_clicked() {
+    printClientList(this->modelUsers, Server::getClientList(), ui->userTable);
+    ui->searchUserBox->clear();
+
+}
+
+void ServerSideDialog::on_searchUserBox_textChanged(const QString &arg1) {
+    if(arg1.length() > ChatUtilities::maxNickLenght) { ui->searchUserBox->backspace(); }
+}
+

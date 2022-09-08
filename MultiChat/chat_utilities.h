@@ -2,6 +2,7 @@
 #define CHAT_UTILITIES_H
 
 #include <boost/asio.hpp>
+#include <QString>
 #include <string>
 
 namespace ChatUtilities {
@@ -10,6 +11,12 @@ namespace ChatUtilities {
 
     /* send a message to a socket */
     void send(boost::asio::ip::tcp::socket* socket, const std::string& msg);
+
+    /* max lenght for a nickname */
+    const int maxNickLenght = 16;
+
+    /* min lenght for nickname */
+    const int minNickLenght = 5;
 }
 
 namespace ChatMessages {

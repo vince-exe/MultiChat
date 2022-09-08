@@ -1,5 +1,7 @@
 #include "server.h"
 
+std::unordered_map<std::string, boost::asio::ip::tcp::socket*> Server::clientList;
+
 Server::Server(std::string ipAddress, int port) {
     /* allocate the space for the acceptor */
     this->acceptor = new boost::asio::ip::tcp::acceptor(this->ioContext, boost::asio::ip::tcp::endpoint(boost::asio::ip::address::from_string(ipAddress), port));
@@ -47,4 +49,8 @@ bool Server::eraseClient(const std::string &pos) {
     this->clientList.erase(it);
 
     return true;
+}
+
+std::unordered_map<std::string, boost::asio::ip::tcp::socket *> Server::getClientList() {
+    return Server::clientList;
 }

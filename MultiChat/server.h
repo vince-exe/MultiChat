@@ -15,9 +15,6 @@ private:
     /* create an acceptor, for accepting new connections */
     boost::asio::ip::tcp::acceptor* acceptor;
 
-    /* used to store the clients */
-    std::unordered_map<std::string, boost::asio::ip::tcp::socket*> clientList;
-
 public:
     Server(std::string ipAddress, int port);
 
@@ -32,6 +29,14 @@ public:
 
     /* erase from the client list the given client */
     bool eraseClient(const std::string& pos);
+
+public:
+    /* used to store the clients */
+    static std::unordered_map<std::string, boost::asio::ip::tcp::socket*> clientList;
+
+    /* get the client list */
+    static std::unordered_map<std::string, boost::asio::ip::tcp::socket*> getClientList();
+
 };
 
 #endif // SERVER_H
