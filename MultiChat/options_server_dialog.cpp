@@ -11,6 +11,8 @@ OptionsServerDialog::OptionsServerDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::OptionsServerDialog) {
     ui->setupUi(this);
+
+    OptionsServerDialog::serverOpened = false;
 }
 
 OptionsServerDialog::~OptionsServerDialog() {

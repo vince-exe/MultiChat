@@ -19,12 +19,21 @@ void send(boost::asio::ip::tcp::socket* socket, const std::string& msg) {
 }
 
 int main() {
+	std::string nickname;
+
+	std::cout << "Nickname: ";
+	std::getline(std::cin, nickname);
+
 	boost::asio::io_context context;
 
 	boost::asio::ip::tcp::socket socket(context);
 
 	socket.connect(boost::asio::ip::tcp::endpoint(boost::asio::ip::address::from_string("127.0.0.1"), 8000));
-	send(&socket, "ciao\n");
+	send(&socket, nickname + "\n");
 
+	std::string messageFromServer = read_until(&socket, "\n");
+	std::cout << "\nMessage From Server: " << messageFromServer;
+	
+	system("pause");
 	return 0;
 }

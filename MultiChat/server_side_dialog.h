@@ -10,8 +10,6 @@
 
 QStandardItem* getItem(QString string);
 
-void listen_clients(std::string ip, int port);
-
 namespace Ui {
 class ServerSideDialog;
 }
@@ -29,15 +27,23 @@ public:
     QStringList horizontalHeaderUsers;
     QStringList verticalHeaderUsers;
 
-    std::thread listen_thread;
+    std::thread acceptThread;
 
     static bool isServerOpen;
+
+    Ui::ServerSideDialog *ui;
 
 private slots:
     void on_optionsBtn_clicked();
 
 private:
-    Ui::ServerSideDialog *ui;
+
 };
+
+/* accept the incoming connections */
+void acceptClients(std::string ip, int port, ServerSideDialog* objcet);
+
+/* listen the messages of a single client */
+void listenClient(const std::string& nickname);
 
 #endif // SERVER_SIDE_DIALOG_H

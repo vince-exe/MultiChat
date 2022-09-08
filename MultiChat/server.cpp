@@ -12,14 +12,39 @@ void Server::listen() {
     this->acceptor->accept(*this->clientList.at(""));
 }
 
-void Server::pushClientNickname(std::string nickname, const std::string& pos) {
+bool Server::pushClientNickname(std::string nickname, const std::string& pos) {
+    /* if there is already a client with this nickname */
+    if(this->clientList.find(nickname) != this->clientList.end()) {
+        return false;
+    }
+
     /* extract the node of the new socket to store his nickname */
     auto node = this->clientList.extract(pos);
     node.key() = nickname;
 
     this->clientList.insert(std::move(node));
+    return true;
 }
 
 boost::asio::ip::tcp::socket *Server::getSocketAt(const std::string &pos) {
     return this->clientList.at(pos);
+}
+
+bool Server::eraseClient(const std::string &pos) {
+    auto it = this->clientList.find(pos);
+
+    /* check if the node exist */
+    if(it == this->clientList.end()) {
+        return false;
+    }
+
+    /* close the socket */
+    it->second->close();
+    /* dealloc the socket */
+    delete it->second;
+
+    /* remove the node from the map */
+    this->clientList.erase(it);
+
+    return true;
 }

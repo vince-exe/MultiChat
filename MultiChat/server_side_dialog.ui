@@ -528,12 +528,24 @@ QTableView::item:selected {
 background-color: rgb(102, 16, 53);
 }</string>
    </property>
+   <property name="verticalScrollBarPolicy">
+    <enum>Qt::ScrollBarAlwaysOff</enum>
+   </property>
+   <property name="horizontalScrollBarPolicy">
+    <enum>Qt::ScrollBarAlwaysOff</enum>
+   </property>
+   <property name="sizeAdjustPolicy">
+    <enum>QAbstractScrollArea::AdjustToContents</enum>
+   </property>
    <property name="editTriggers">
     <set>QAbstractItemView::NoEditTriggers</set>
    </property>
    <property name="gridStyle">
     <enum>Qt::SolidLine</enum>
    </property>
+   <attribute name="verticalHeaderVisible">
+    <bool>true</bool>
+   </attribute>
   </widget>
   <widget class="QLabel" name="statusLabel">
    <property name="geometry">

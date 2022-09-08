@@ -19,21 +19,42 @@ QStandardItem* getItem(QString string) {
     return item;
 }
 
-void listen_clients(std::string ip, int port) {
+void acceptClients(std::string ip, int port, ServerSideDialog* object) {
     /* open the server at the given ip and port */
     Server server(ip, port);
+
+    /* keep the count of the clients */
+    int indexClient = 0;
 
     while(true) {
         /* listen for connection */
         server.listen();
+        /* get the nickname from the new socket */
+        std::string nickname = ChatUtilities::read_until(server.getSocketAt(""), ChatMessages::termCharacter);
+        /* remove the term character */
+        nickname.resize(nickname.size() - 1);
 
-        std::string nickname = ChatUtilities::read_until(server.getSocketAt(""), "\n");
+        /* try to push the client inside the map of clients */
+        if(!server.pushClientNickname(nickname, "")) {
+            /* there is already a client with this nickname */
+            ChatUtilities::send(server.getSocketAt(""), ChatMessages::nickAlreadyInUse + ChatMessages::termCharacter);
+            /* remove the new socket from the map */
+            server.eraseClient("");
+            continue;
+        }
+        /* send the accept message */
+        ChatUtilities::send(server.getSocketAt(nickname), ChatMessages::clientAccepted + ChatMessages::termCharacter);
 
-        qDebug() << QString::fromStdString(nickname);
+        /* push the client inside the clients list */
+        object->modelUsers->setItem(indexClient, getItem(QString::fromStdString(nickname)));
+        object->ui->userTable->setModel(object->modelUsers);
 
-        /* push the client inside the map of clients */
-        server.pushClientNickname(nickname, "");
+        indexClient++;
     }
+}
+
+void listenClient(const std::string& nickname) {
+
 }
 
 ServerSideDialog::ServerSideDialog(QWidget *parent) :
@@ -63,7 +84,7 @@ ServerSideDialog::ServerSideDialog(QWidget *parent) :
     ui->userTable->verticalHeader()->setVisible(false);
     ui->userTable->setSelectionMode(QAbstractItemView::NoSelection);
     ui->userTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    ui->userTable->verticalHeader()->setDefaultSectionSize(55);
+    ui->userTable->verticalHeader()->setDefaultSectionSize(50);
 
     ui->userTable->setModel(this->modelUsers);
 
@@ -91,7 +112,7 @@ void ServerSideDialog::on_optionsBtn_clicked() {
         ServerSideDialog::isServerOpen = true;
 
         /* create the thread to listen the clients */
-        this->listen_thread = std::thread(listen_clients, IpPortDialog::ipAddress, IpPortDialog::port);
+        this->acceptThread = std::thread(acceptClients, IpPortDialog::ipAddress, IpPortDialog::port, this);
         ui->statusLabel->setStyleSheet("background-color: rgb(6, 86, 1);");
         return;
     }

@@ -10,3 +10,8 @@ std::string ChatUtilities::read_until(boost::asio::ip::tcp::socket* socket, cons
 
     return message;
 }
+
+void ChatUtilities::send(boost::asio::ip::tcp::socket *socket, const std::string &msg) {
+    boost::system::error_code er;
+    boost::asio::write(*socket, boost::asio::buffer(msg), er);
+}

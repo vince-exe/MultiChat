@@ -25,9 +25,13 @@ public:
     void listen();
 
     /* save the nickname of the client */
-    void pushClientNickname(std::string nickname, const std::string& pos);
+    bool pushClientNickname(std::string nickname, const std::string& pos);
 
+    /* get the socket of a specific client */
     boost::asio::ip::tcp::socket* getSocketAt(const std::string& pos);
+
+    /* erase from the client list the given client */
+    bool eraseClient(const std::string& pos);
 };
 
 #endif // SERVER_H

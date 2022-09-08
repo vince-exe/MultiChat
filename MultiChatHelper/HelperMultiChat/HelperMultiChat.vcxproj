@@ -71,16 +71,16 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>D:\Programs\C++Libraries\asio-1.24.0\include;D:\Programs\C++Libraries\boost_1_80_0;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\Vincenzo\OneDrive\Documenti\C++Libraries\boost_1_80_0;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>D:\Programs\C++Libraries\asio-1.24.0\include;D:\Programs\C++Libraries\boost_1_80_0;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\Vincenzo\OneDrive\Documenti\C++Libraries\boost_1_80_0;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>D:\Programs\C++Libraries\asio-1.24.0\include;D:\Programs\C++Libraries\boost_1_80_0;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\Vincenzo\OneDrive\Documenti\C++Libraries\boost_1_80_0;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>D:\Programs\C++Libraries\asio-1.24.0\include;D:\Programs\C++Libraries\boost_1_80_0;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\Vincenzo\OneDrive\Documenti\C++Libraries\boost_1_80_0;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
