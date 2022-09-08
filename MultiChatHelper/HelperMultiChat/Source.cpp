@@ -34,6 +34,13 @@ int main() {
 	std::string messageFromServer = read_until(&socket, "\n");
 	std::cout << "\nMessage From Server: " << messageFromServer;
 	
+	std::string message;
+	while (true) {
+		std::getline(std::cin, message);
+
+		send(&socket, message + "\n");
+	}
+
 	system("pause");
 	return 0;
 }

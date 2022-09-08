@@ -49,12 +49,22 @@ void acceptClients(std::string ip, int port, ServerSideDialog* object) {
         object->modelUsers->setItem(indexClient, getItem(QString::fromStdString(nickname)));
         object->ui->userTable->setModel(object->modelUsers);
 
+        /* start the thread to listen the connected client */
+        object->listenClientsThreads.push_back(std::thread(listenClient, std::ref(nickname), std::ref(server)));
         indexClient++;
     }
 }
 
-void listenClient(const std::string& nickname) {
+void listenClient(const std::string& nickname, Server& server) {
+    /* get the client socket */
+    boost::asio::ip::tcp::socket* socketClient = server.getSocketAt(nickname);
+    std::string message;
 
+    while(true) {
+        /* read the content */
+        message = ChatUtilities::read_until(socketClient, ChatMessages::termCharacter);
+        qDebug() << QString::fromStdString(message);
+    }
 }
 
 ServerSideDialog::ServerSideDialog(QWidget *parent) :

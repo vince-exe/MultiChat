@@ -8,6 +8,8 @@
 
 #include <thread>
 
+#include "server.h"
+
 QStandardItem* getItem(QString string);
 
 namespace Ui {
@@ -29,6 +31,9 @@ public:
 
     std::thread acceptThread;
 
+    /* vector to store all the active threads */
+    std::vector<std::thread> listenClientsThreads;
+
     static bool isServerOpen;
 
     Ui::ServerSideDialog *ui;
@@ -44,6 +49,6 @@ private:
 void acceptClients(std::string ip, int port, ServerSideDialog* objcet);
 
 /* listen the messages of a single client */
-void listenClient(const std::string& nickname);
+void listenClient(const std::string& nickname, Server& server);
 
 #endif // SERVER_SIDE_DIALOG_H
