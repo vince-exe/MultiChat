@@ -3,7 +3,7 @@
 
 #include <QMessageBox>
 
-#include "main_dialog.h"
+#include "chat_utilities.h"
 
 #include <thread>
 
@@ -55,7 +55,7 @@ void IpPortDialog::on_cancelBtn_clicked() {
 }
 
 void IpPortDialog::on_doneBtn_clicked() {
-    if(!ui->ipLineEdit->text().length() || ui->portLineEdit->text().length() <= 3) {
+    if(!ui->ipLineEdit->text().length() || ui->portLineEdit->text().length() <= ChatUtilities::minPortLen) {
         QMessageBox::warning(0, "Warning", "Invalid ip-address / port");
         return;
     }
@@ -67,6 +67,7 @@ void IpPortDialog::on_doneBtn_clicked() {
     }
     else {
         /* check the connection */
+        IpPortDialog::doneBtnPressed = true;
     }
 
     this->close(); return;

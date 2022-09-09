@@ -11,24 +11,32 @@ CONFIG += static
 
 SOURCES += \
     chat_utilities.cpp \
+    client.cpp \
+    client_side_dialog.cpp \
     ip_port_dialog.cpp \
     main.cpp \
     main_dialog.cpp \
+    nickname_dialog.cpp \
     options_server_dialog.cpp \
     server.cpp \
     server_side_dialog.cpp
 
 HEADERS += \
     chat_utilities.h \
+    client.h \
+    client_side_dialog.h \
     ip_port_dialog.h \
     main_dialog.h \
+    nickname_dialog.h \
     options_server_dialog.h \
     server.h \
     server_side_dialog.h
 
 FORMS += \
+    client_side_dialog.ui \
     ip_port_dialog.ui \
     main_dialog.ui \
+    nickname_dialog.ui \
     options_server_dialog.ui \
     server_side_dialog.ui
 

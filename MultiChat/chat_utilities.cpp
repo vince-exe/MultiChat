@@ -15,3 +15,12 @@ void ChatUtilities::send(boost::asio::ip::tcp::socket *socket, const std::string
     boost::system::error_code er;
     boost::asio::write(*socket, boost::asio::buffer(msg), er);
 }
+
+bool ChatUtilities::checkStringSpaces(const QString& string, const char* c, int maxCount) {
+    int count = 0;
+    for(int i = 0; i < string.length(); i++) {
+        if(string[i] == *c) { count++; }
+    }
+    /* fare più generale */
+    return (count <= maxCount);
+}

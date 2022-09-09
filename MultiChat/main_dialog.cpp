@@ -4,6 +4,8 @@
 /* forms */
 #include "ip_port_dialog.h"
 #include "server_side_dialog.h"
+#include "nickname_dialog.h"
+#include "client_side_dialog.h"
 
 MainDialog::MainDialog(QWidget *parent)
     : QDialog(parent)
@@ -51,5 +53,17 @@ void MainDialog::on_connectBtn_clicked() {
     ipPortDialog.exec();
 
     if(!IpPortDialog::doneBtnPressed) { return; }
+
+    NicknameDialog nickDialog;
+    nickDialog.setModal(true);
+    nickDialog.show();
+    nickDialog.exec();
+
+    if(!NicknameDialog::insertNickname) { return; }
+
+    ClientSideDialog clientSideDialog;
+    clientSideDialog.setModal(true);
+    clientSideDialog.show();
+    clientSideDialog.exec();
 }
 

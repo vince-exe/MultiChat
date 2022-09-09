@@ -19,7 +19,6 @@ QStandardItem* getItem(QString string) {
     return item;
 }
 
-
 void printClientList(QStandardItemModel* model, std::unordered_map<std::string, boost::asio::ip::tcp::socket*> map, QTableView* table) {
     int i = 0;
     for(auto&it : map) {

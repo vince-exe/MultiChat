@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>IpPortDialog</class>
- <widget class="QDialog" name="IpPortDialog">
+ <class>NicknameDialog</class>
+ <widget class="QDialog" name="NicknameDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>329</width>
-    <height>300</height>
+    <width>248</width>
+    <height>221</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,59 +15,15 @@
   </property>
   <property name="styleSheet">
    <string notr="true">QDialog {
-background-color: '#0d3d4c';
+	background-color: '#0d3d4c';
 }</string>
   </property>
-  <widget class="QPushButton" name="doneBtn">
-   <property name="geometry">
-    <rect>
-     <x>210</x>
-     <y>250</y>
-     <width>101</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">QPushButton {
-	border: 4px solid '#101014';
-	font: 700 17pt &quot;Yu Gothic UI&quot;;
-	letter-spacing: 1.4px;
-	color: '#e3e3e3';
-}
-
-QPushButton::hover {
-	background-color: '#0c2f3a';
-}</string>
-   </property>
-   <property name="text">
-    <string>Done</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="lineLabel">
-   <property name="geometry">
-    <rect>
-     <x>60</x>
-     <y>60</y>
-     <width>201</width>
-     <height>4</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">QLabel {
-	background-color: '#101014';
-	border-radius: 2px;
-}</string>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-  </widget>
   <widget class="QLabel" name="titleLabel">
    <property name="geometry">
     <rect>
-     <x>50</x>
-     <y>10</y>
-     <width>221</width>
+     <x>17</x>
+     <y>15</y>
+     <width>211</width>
      <height>41</height>
     </rect>
    </property>
@@ -85,11 +41,30 @@ QPushButton::hover {
     <set>Qt::AlignCenter</set>
    </property>
   </widget>
+  <widget class="QLabel" name="lineLabel">
+   <property name="geometry">
+    <rect>
+     <x>25</x>
+     <y>70</y>
+     <width>201</width>
+     <height>4</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLabel {
+	background-color: '#101014';
+	border-radius: 2px;
+}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
   <widget class="QPushButton" name="cancelBtn">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>250</y>
+     <x>10</x>
+     <y>170</y>
      <width>101</width>
      <height>41</height>
     </rect>
@@ -110,77 +85,59 @@ QPushButton::hover {
     <string>Cancel</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="ipLineEdit">
+  <widget class="QPushButton" name="doneBtn">
    <property name="geometry">
     <rect>
-     <x>60</x>
-     <y>90</y>
-     <width>201</width>
+     <x>137</x>
+     <y>170</y>
+     <width>101</width>
      <height>41</height>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">QLineEdit {
-	border: 5px solid '#101014';
-	font: 700 16pt &quot;Yu Gothic UI&quot;;
-	letter-spacing: 2px;
+    <string notr="true">QPushButton {
+	border: 4px solid '#101014';
+	font: 700 17pt &quot;Yu Gothic UI&quot;;
+	letter-spacing: 1.4px;
 	color: '#e3e3e3';
-	background-color: '#0d3d4c';
 }
 
-QLineEdit::hover {
+QPushButton::hover {
 	background-color: '#0c2f3a';
 }</string>
    </property>
    <property name="text">
-    <string>127.0.0.1</string>
-   </property>
-   <property name="frame">
-    <bool>true</bool>
-   </property>
-   <property name="echoMode">
-    <enum>QLineEdit::Normal</enum>
-   </property>
-   <property name="cursorPosition">
-    <number>9</number>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignCenter</set>
-   </property>
-   <property name="placeholderText">
-    <string/>
+    <string>Done</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="portLineEdit">
+  <widget class="QLineEdit" name="nickBox">
    <property name="geometry">
     <rect>
-     <x>60</x>
-     <y>160</y>
-     <width>201</width>
+     <x>20</x>
+     <y>100</y>
+     <width>211</width>
      <height>41</height>
     </rect>
    </property>
    <property name="styleSheet">
     <string notr="true">QLineEdit {
-	border: 5px solid '#101014';
-	font: 700 16pt &quot;Yu Gothic UI&quot;;
+	border: 4px solid '#101014';
+	font: 700 12pt &quot;Yu Gothic UI&quot;;
 	letter-spacing: 2px;
 	color: '#e3e3e3';
 	background-color: '#0d3d4c';
+	padding-left: 13px;
 }
 
 QLineEdit::hover {
 	background-color: '#0c2f3a';
 }</string>
    </property>
-   <property name="text">
-    <string>4000</string>
-   </property>
    <property name="alignment">
     <set>Qt::AlignCenter</set>
    </property>
    <property name="placeholderText">
-    <string/>
+    <string>Nickname</string>
    </property>
   </widget>
  </widget>

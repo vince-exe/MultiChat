@@ -12,19 +12,25 @@ namespace ChatUtilities {
     /* send a message to a socket */
     void send(boost::asio::ip::tcp::socket* socket, const std::string& msg);
 
+    /* count how many times the character appears in the string */
+    bool checkStringSpaces(const QString& string, const char* c, int maxCount);
+
     /* max lenght for a nickname */
     const int maxNickLenght = 16;
 
     /* min lenght for nickname */
     const int minNickLenght = 5;
+
+    /* max lenght for the port */
+    const int minPortLen = 3;
 }
 
 namespace ChatMessages {
     const std::string termCharacter = "\n";
 
-    const std::string nickAlreadyInUse = "[[NickAlreadyInUse]]";
+    const std::string nickAlreadyInUse = "[.[NickAlreadyInUse].]";
 
-    const std::string clientAccepted = "[[ClientAccepted]]";
+    const std::string clientAccepted = "[.[ClientAccepted].]";
 }
 
 #endif // CHAT_UTILITIES_H
