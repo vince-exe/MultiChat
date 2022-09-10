@@ -39,7 +39,6 @@ void MainDialog::on_createBtn_clicked() {
 
     ServerSideDialog serverSideDialog;
 
-    serverSideDialog.setModal(true);
     serverSideDialog.show();
     serverSideDialog.exec();
 }
@@ -62,7 +61,7 @@ void MainDialog::on_connectBtn_clicked() {
     if(!NicknameDialog::insertNickname) { return; }
 
     ClientSideDialog clientSideDialog;
-    clientSideDialog.setModal(true);
+
     clientSideDialog.show();
     clientSideDialog.exec();
 }

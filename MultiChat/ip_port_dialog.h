@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include <boost/asio.hpp>
+#include <thread>
 
 namespace Ui {
 class IpPortDialog;

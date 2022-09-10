@@ -51,6 +51,17 @@ bool Server::eraseClient(const std::string &pos) {
     return true;
 }
 
+std::vector<std::string> Server::getUserNames() {
+    std::vector<std::string> clientNames;;
+    for(auto& it : this->clientList) {
+        clientNames.push_back(it.first);
+    }
+    /* remove the empty socket */
+    clientNames.erase(clientNames.begin());
+
+    return clientNames;
+}
+
 std::unordered_map<std::string, boost::asio::ip::tcp::socket *> Server::getClientList() {
     return Server::clientList;
 }

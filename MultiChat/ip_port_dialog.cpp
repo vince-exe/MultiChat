@@ -4,6 +4,7 @@
 #include <QMessageBox>
 
 #include "chat_utilities.h"
+#include "client.h"
 
 #include <thread>
 
@@ -66,7 +67,16 @@ void IpPortDialog::on_doneBtn_clicked() {
         IpPortDialog::doneBtnPressed = true;
     }
     else {
-        /* check the connection */
+        /* create a "test client" to verify the connection */
+        Client client;
+        /* connect to the server */
+        if(!client.connect(IpPortDialog::ipAddress, IpPortDialog::port, "TEST")) {
+            QMessageBox::critical(0, "Error", "The server is not responding...");
+            client.close();
+            return;
+        }
+        ChatUtilities::send(client.getSocket(), ChatMessages::connectionTest + ChatMessages::termCharacter);
+        client.close();
         IpPortDialog::doneBtnPressed = true;
     }
 

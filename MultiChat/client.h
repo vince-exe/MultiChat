@@ -3,7 +3,7 @@
 
 #include <boost/asio.hpp>
 
-class client {
+class Client {
 private:
     /* context to execute the work */
     boost::asio::io_context io_context;
@@ -11,11 +11,22 @@ private:
     /* socket pointer */
     boost::asio::ip::tcp::socket* socketClient;
 
+    std::string nickname;
+
 public:
-    client();
+    Client();
 
     /* connect to a specific endpoint */
-    bool connect(const std::string& ipAddress, int port);
+    bool connect(const std::string& ipAddress, int port, std::string nickname);
+
+    /* return the socket pointer */
+    boost::asio::ip::tcp::socket *getSocket();
+
+    /* close the socket */
+    void close();
+
+    std::string getNickname();
+
 };
 
 #endif // CLIENT_H

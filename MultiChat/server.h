@@ -30,13 +30,15 @@ public:
     /* erase from the client list the given client */
     bool eraseClient(const std::string& pos);
 
+    /* get client list, ( only keys ) */
+    std::vector<std::string> getUserNames();
+
 public:
     /* used to store the clients */
     static std::unordered_map<std::string, boost::asio::ip::tcp::socket*> clientList;
 
     /* get the client list */
-    static std::unordered_map<std::string, boost::asio::ip::tcp::socket*> getClientList();
-
+    static std::unordered_map<std::string, boost::asio::ip::tcp::socket*> getClientList();   
 };
 
 #endif // SERVER_H

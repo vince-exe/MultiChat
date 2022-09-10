@@ -21,6 +21,8 @@ public:
 
     static bool insertNickname;
 
+    static bool checkNickName(std::vector<std::string>* vec, std::string& str);
+
 private slots:
     void on_cancelBtn_clicked();
 

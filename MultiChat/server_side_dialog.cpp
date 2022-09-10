@@ -52,12 +52,28 @@ void acceptClients(std::string ip, int port, ServerSideDialog* object) {
         /* listen for connection */
         server.listen();
         /* get the nickname from the new socket */
-        std::string nickname = ChatUtilities::read_until(server.getSocketAt(""), ChatMessages::termCharacter);
+        std::string message = ChatUtilities::read_until(server.getSocketAt(""), ChatMessages::termCharacter);
         /* remove the term character */
-        nickname.resize(nickname.size() - 1);
+        message.resize(message.size() - 1);
+
+        if(message == ChatMessages::connectionTest) {
+            /* remove the new socket from the map */
+            server.eraseClient("");
+            continue;
+        }
+        else if(message == ChatMessages::giveUsersList) {
+            std::vector<std::string> clientNames = server.getUserNames();
+            /* send the size of the vec */
+            ChatUtilities::send(server.getSocketAt(""), std::to_string(clientNames.size()) + ChatMessages::termCharacter);
+            /* send the vector */
+            server.getSocketAt("")->write_some(boost::asio::buffer(clientNames, clientNames.size()));
+            /* remove the new socket from the map */
+            server.eraseClient("");
+            continue;
+        }
 
         /* try to push the client inside the map of clients */
-        if(!server.pushClientNickname(nickname, "")) {
+        if(!server.pushClientNickname(message, "")) {
             /* there is already a client with this nickname */
             ChatUtilities::send(server.getSocketAt(""), ChatMessages::nickAlreadyInUse + ChatMessages::termCharacter);
             /* remove the new socket from the map */
@@ -65,14 +81,14 @@ void acceptClients(std::string ip, int port, ServerSideDialog* object) {
             continue;
         }
         /* send the accept message */
-        ChatUtilities::send(server.getSocketAt(nickname), ChatMessages::clientAccepted + ChatMessages::termCharacter);
+        ChatUtilities::send(server.getSocketAt(message), ChatMessages::clientAccepted + ChatMessages::termCharacter);
 
         /* push the client inside the clients list */
-        object->modelUsers->setItem(indexClient, getItem(QString::fromStdString(nickname)));
+        object->modelUsers->setItem(indexClient, getItem(QString::fromStdString(message)));
         object->ui->userTable->setModel(object->modelUsers);
 
         /* start the thread to listen the connected client */
-        object->listenClientsThreads.push_back(std::thread(listenClient, nickname, std::ref(server), object));
+        object->listenClientsThreads.push_back(std::thread(listenClient, message, std::ref(server), object));
         indexClient++;
     }
 }

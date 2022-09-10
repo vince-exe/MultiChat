@@ -2,6 +2,9 @@
 #define CLIENT_SIDE_DIALOG_H
 
 #include <QDialog>
+#include <thread>
+
+#include "client.h"
 
 namespace Ui {
 class ClientSideDialog;
@@ -15,8 +18,22 @@ public:
     explicit ClientSideDialog(QWidget *parent = nullptr);
     ~ClientSideDialog();
 
+   /* thread to listen the server messages */
+   std::thread listenThread;
+
+   /* pointer to the client object */
+   Client* client;
+
+   Ui::ClientSideDialog *ui;
+
+private slots:
+   void on_sendMsgBtn_clicked();
+
 private:
-    Ui::ClientSideDialog *ui;
+
 };
+
+/* listen the server messages */
+void listenServer(ClientSideDialog* object, Client* client);
 
 #endif // CLIENT_SIDE_DIALOG_H
