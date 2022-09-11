@@ -3,6 +3,8 @@
 
 #include <QDialog>
 #include <thread>
+#include <QStandardItemModel>
+#include <QTableView>
 
 #include "client.h"
 
@@ -26,6 +28,11 @@ public:
 
    Ui::ClientSideDialog *ui;
 
+   QStandardItemModel* modelUsersClient;
+
+   QStringList horizontalHeaderUsers;
+   QStringList verticalHeaderUsers;
+
 private slots:
    void on_sendMsgBtn_clicked();
 
@@ -37,5 +44,8 @@ private:
 
 /* listen the server messages */
 void listenServer(ClientSideDialog* object, Client* client);
+
+/* fill the client list */
+void fillClientList(std::vector<std::string>* vec, QStandardItemModel* model, QTableView* table);
 
 #endif // CLIENT_SIDE_DIALOG_H

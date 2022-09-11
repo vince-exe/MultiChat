@@ -10,20 +10,11 @@
 
 bool ServerSideDialog::isServerOpen = false;
 
-/* return an item pointer with the text aligned */
-QStandardItem* getItem(QString string) {
-    QStandardItem* item = new QStandardItem;
-    item->setTextAlignment(Qt::AlignCenter);
-    item->setText(string);
-
-    return item;
-}
-
 void printClientList(QStandardItemModel* model, std::map<std::string, boost::asio::ip::tcp::socket*> map, QTableView* table) {
     int i = 0;
     for(auto&it : map) {
         if(it.first.length()) {
-            model->setItem(i, getItem(QString::fromStdString(it.first)));
+            model->setItem(i, ChatUtilities::getItem(QString::fromStdString(it.first)));
             i++;
         }
     }
@@ -34,7 +25,7 @@ void printSearchedClients(const std::string &clientSearched, QStandardItemModel 
     int i = 0;
     for(auto& it : map) {
         if(it.first == clientSearched) {
-            model->setItem(i, getItem(QString::fromStdString(clientSearched)));
+            model->setItem(i, ChatUtilities::getItem(QString::fromStdString(clientSearched)));
             i++;
         }
     }
@@ -63,14 +54,17 @@ void acceptClients(Server* server, ServerSideDialog* object) {
             server->eraseClient("");
             continue;
         }
+        /* send the welcome message to the other clients */
+        sendToAll(server, "[ Server ] " + message + " joined the chat" + ChatMessages::termCharacter, message);
+        /* send the joined message, ( when the clients receive this message they automatically request the client list updated */
+        sendToAll(server, ChatMessages::clientJoined + ChatMessages::termCharacter, message);
 
         /* push the new client */
         server->pushClientNickname(message, "");
-        /* send the accept message */
-        boost::asio::write(*server->getSocketAt(message), boost::asio::buffer(ChatMessages::clientAccepted + ChatMessages::termCharacter));
 
+        /* send the
         /* push the client inside the clients list */
-        object->modelUsers->setItem(server->getConnCount(), getItem(QString::fromStdString(message)));
+        object->modelUsers->setItem(server->getConnCount(), ChatUtilities::getItem(QString::fromStdString(message)));
         object->ui->userTable->setModel(object->modelUsers);
 
         /* start the thread to listen the connected client */
@@ -84,18 +78,28 @@ void listenClient(const std::string nickname, Server* server, ServerSideDialog* 
     boost::asio::ip::tcp::socket* socketClient = server->getSocketAt(nickname);
     std::string message;
 
+    /* send the client list */
+    boost::asio::write(*socketClient, boost::asio::buffer(server->getClientListSerialized(ChatMessages::serializationChar.c_str()) + ChatMessages::termCharacter));
+
     while(true) {
         /* read the content */
         message = ChatUtilities::read_until(socketClient, ChatMessages::termCharacter);
         message.resize(message.size() - 1);
 
+        if(message == ChatMessages::clientListUpdt) {
+            /* send the client list */
+            message = server->getClientListSerialized(ChatMessages::serializationChar.c_str());
+            boost::asio::write(*socketClient, boost::asio::buffer(message + ChatMessages::termCharacter));
+            continue;
+        }
+
         /* display the content to the screen */
         QTextCursor textCursor = QTextCursor(object->ui->chatBox->document());
         textCursor.movePosition(QTextCursor::End);
-        textCursor.insertText("[ " + QString::fromStdString(nickname) + " ]: " + QString::fromStdString(message) + "\n");
+        textCursor.insertText("[ " + QString::fromStdString(nickname) + " ] " + QString::fromStdString(message) + "\n");
 
         /* send the message to the other clients */
-        sendToAll(server, message, nickname);
+        sendToAll(server, "[ " + nickname + " ] " + message + ChatMessages::termCharacter, nickname);
     }
 }
 
@@ -106,7 +110,7 @@ void sendToAll(Server* server, const std::string& message, const std::string& ni
         /* check that message doesn't go at the author and doesn't go at the test socket */
         if(it.first == nickname || it.first == "") { continue; }
 
-        boost::asio::write(*it.second, boost::asio::buffer("[ " + nickname + " ]: " + message + ChatMessages::termCharacter));
+        boost::asio::write(*it.second, boost::asio::buffer(message));
     }
 }
 

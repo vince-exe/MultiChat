@@ -19,7 +19,7 @@
 }
 </string>
   </property>
-  <widget class="QTableView" name="userTable">
+  <widget class="QTableView" name="userTableClient">
    <property name="geometry">
     <rect>
      <x>160</x>

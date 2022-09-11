@@ -18,3 +18,11 @@ bool ChatUtilities::checkStringCharacter(const QString& string, const char* c, i
     /* fare più generale */
     return (count <= maxCount);
 }
+
+QStandardItem *ChatUtilities::getItem(QString string) {
+    QStandardItem* item = new QStandardItem;
+    item->setTextAlignment(Qt::AlignCenter);
+    item->setText(string);
+
+    return item;
+}

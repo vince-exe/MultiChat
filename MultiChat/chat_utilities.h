@@ -2,8 +2,10 @@
 #define CHAT_UTILITIES_H
 
 #include <boost/asio.hpp>
+
 #include <QString>
 #include <string>
+#include <QStandardItemModel>
 
 namespace ChatUtilities {
     /* read message from a socket */
@@ -14,6 +16,9 @@ namespace ChatUtilities {
 
     /* count how many times the character appears in the string */
     bool checkStringCharacter(const QString& string, const char* c, int maxCount);
+
+    /* return an item model */
+    QStandardItem *getItem(QString string);
 
     /* max lenght for a nickname */
     const int maxNickLenght = 16;
@@ -32,11 +37,13 @@ namespace ChatMessages {
 
     const std::string nickFree = "[.[NickFree].]";
 
-    const std::string clientAccepted = "[.[ClientAccepted].]";
-
     const std::string connectionTest = "[.[ConnectionTest].]";
 
     const std::string getClientList = "[.[ClientList].]";
+
+    const std::string clientJoined = "[.[ClientJoined].]";
+
+    const std::string clientListUpdt = "[.[UpdatedClientList].]";
 }
 
 #endif // CHAT_UTILITIES_H

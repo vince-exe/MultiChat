@@ -11,8 +11,6 @@
 
 #include "server.h"
 
-QStandardItem* getItem(QString string);
-
 namespace Ui {
 class ServerSideDialog;
 }
