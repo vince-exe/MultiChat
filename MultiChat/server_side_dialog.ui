@@ -482,11 +482,17 @@ QPushButton::hover {
    <property name="styleSheet">
     <string notr="true">QPlainTextEdit {
 	border: 6px solid '#101014';
-	font: 700 14pt &quot;Yu Gothic UI&quot;;
-	color: '#e3e3e3';
+	font: 700 12pt &quot;Yu Gothic UI&quot;;
+	color: rgb(189, 189, 189);
 	background-color: '#0d3d4c';
 }
 </string>
+   </property>
+   <property name="verticalScrollBarPolicy">
+    <enum>Qt::ScrollBarAlwaysOff</enum>
+   </property>
+   <property name="horizontalScrollBarPolicy">
+    <enum>Qt::ScrollBarAlwaysOff</enum>
    </property>
    <property name="readOnly">
     <bool>true</bool>

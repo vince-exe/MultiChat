@@ -19,7 +19,7 @@ QStandardItem* getItem(QString string) {
     return item;
 }
 
-void printClientList(QStandardItemModel* model, std::unordered_map<std::string, boost::asio::ip::tcp::socket*> map, QTableView* table) {
+void printClientList(QStandardItemModel* model, std::map<std::string, boost::asio::ip::tcp::socket*> map, QTableView* table) {
     int i = 0;
     for(auto&it : map) {
         if(it.first.length()) {
@@ -30,7 +30,7 @@ void printClientList(QStandardItemModel* model, std::unordered_map<std::string, 
     table->setModel(model);
 }
 
-void printSearchedClients(const std::string &clientSearched, QStandardItemModel *model, std::unordered_map<std::string, boost::asio::ip::tcp::socket*> map, QTableView *table) {
+void printSearchedClients(const std::string &clientSearched, QStandardItemModel *model, std::map<std::string, boost::asio::ip::tcp::socket*> map, QTableView *table) {
     int i = 0;
     for(auto& it : map) {
         if(it.first == clientSearched) {
@@ -45,9 +45,6 @@ void acceptClients(std::string ip, int port, ServerSideDialog* object) {
     /* open the server at the given ip and port */
     Server server(ip, port);
 
-    /* keep the count of the clients */
-    int indexClient = 0;
-
     while(true) {
         /* listen for connection */
         server.listen();
@@ -61,35 +58,25 @@ void acceptClients(std::string ip, int port, ServerSideDialog* object) {
             server.eraseClient("");
             continue;
         }
-        else if(message == ChatMessages::giveUsersList) {
-            std::vector<std::string> clientNames = server.getUserNames();
-            /* send the size of the vec */
-            ChatUtilities::send(server.getSocketAt(""), std::to_string(clientNames.size()) + ChatMessages::termCharacter);
-            /* send the vector */
-            server.getSocketAt("")->write_some(boost::asio::buffer(clientNames, clientNames.size()));
-            /* remove the new socket from the map */
+        if(message == ChatMessages::getClientList) {
+            /* send the list of nicknames */
+            boost::asio::write(*server.getSocketAt(""), boost::asio::buffer(server.getClientListSerialized(ChatMessages::serializationChar.c_str()) + ChatMessages::termCharacter));
             server.eraseClient("");
             continue;
         }
 
-        /* try to push the client inside the map of clients */
-        if(!server.pushClientNickname(message, "")) {
-            /* there is already a client with this nickname */
-            ChatUtilities::send(server.getSocketAt(""), ChatMessages::nickAlreadyInUse + ChatMessages::termCharacter);
-            /* remove the new socket from the map */
-            server.eraseClient("");
-            continue;
-        }
+        /* push the new client */
+        server.pushClientNickname(message, "");
         /* send the accept message */
-        ChatUtilities::send(server.getSocketAt(message), ChatMessages::clientAccepted + ChatMessages::termCharacter);
+        boost::asio::write(*server.getSocketAt(message), boost::asio::buffer(ChatMessages::clientAccepted + ChatMessages::termCharacter));
 
         /* push the client inside the clients list */
-        object->modelUsers->setItem(indexClient, getItem(QString::fromStdString(message)));
+        object->modelUsers->setItem(server.getConnCount(), getItem(QString::fromStdString(message)));
         object->ui->userTable->setModel(object->modelUsers);
 
         /* start the thread to listen the connected client */
         object->listenClientsThreads.push_back(std::thread(listenClient, message, std::ref(server), object));
-        indexClient++;
+        server.setConnCount(server.getConnCount() + 1);
     }
 }
 

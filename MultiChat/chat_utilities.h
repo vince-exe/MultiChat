@@ -9,9 +9,6 @@ namespace ChatUtilities {
     /* read message from a socket */
     std::string read_until(boost::asio::ip::tcp::socket* socket, const std::string& del);
 
-    /* send a message to a socket ( std::string ) */
-    void send(boost::asio::ip::tcp::socket* socket, const std::string& msg);
-
     /* send a message to a socket ( std::vector ) */
     void sendStdVet(boost::asio::ip::tcp::socket* socket, std::vector<std::string>* vec);
 
@@ -31,13 +28,15 @@ namespace ChatUtilities {
 namespace ChatMessages {
     const std::string termCharacter = "\n";
 
-    const std::string nickAlreadyInUse = "[.[NickAlreadyInUse].]";
+    const std::string serializationChar = ";";
+
+    const std::string nickFree = "[.[NickFree].]";
 
     const std::string clientAccepted = "[.[ClientAccepted].]";
 
     const std::string connectionTest = "[.[ConnectionTest].]";
 
-    const std::string giveUsersList = "[.[UsersList].]";
+    const std::string getClientList = "[.[ClientList].]";
 }
 
 #endif // CHAT_UTILITIES_H

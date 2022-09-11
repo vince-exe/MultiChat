@@ -2,11 +2,9 @@
 
 Client::Client() {}
 
-bool Client::connect(const std::string& ipAddress, int port, std::string nickname) {
+bool Client::connect(const std::string& ipAddress, int port) {
     /* allocate space for the socket */
     this->socketClient = new boost::asio::ip::tcp::socket(this->io_context);
-    /* set the nickname */
-    this->nickname = nickname;
 
     try {
         /* try to create a connection endpoint at the given ip-address and port */
@@ -27,7 +25,3 @@ void Client::close() {
     this->socketClient->close();
     delete this->socketClient;
 }
-
-std::string Client::getNickname() {
-    return this->nickname;
-};

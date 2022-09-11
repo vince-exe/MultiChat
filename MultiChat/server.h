@@ -3,7 +3,7 @@
 
 #include <boost/asio.hpp>
 
-#include <unordered_map>
+#include <map>
 #include <vector>
 #include <string>
 
@@ -15,6 +15,9 @@ private:
     /* create an acceptor, for accepting new connections */
     boost::asio::ip::tcp::acceptor* acceptor;
 
+    /* keep trace of the connections */
+    int connectionCount = 0;
+
 public:
     Server(std::string ipAddress, int port);
 
@@ -22,7 +25,7 @@ public:
     void listen();
 
     /* save the nickname of the client */
-    bool pushClientNickname(std::string nickname, const std::string& pos);
+    void pushClientNickname(std::string nickname, const std::string& pos);
 
     /* get the socket of a specific client */
     boost::asio::ip::tcp::socket* getSocketAt(const std::string& pos);
@@ -30,15 +33,22 @@ public:
     /* erase from the client list the given client */
     bool eraseClient(const std::string& pos);
 
-    /* get client list, ( only keys ) */
-    std::vector<std::string> getUserNames();
+    /* check if the given user is in the client list */
+    bool isClient(const std::string& pos);
+
+    void setConnCount(int count);
+
+    int getConnCount();
+
+    /* serialize the client nicknames list */
+    std::string getClientListSerialized(const char* c);
 
 public:
     /* used to store the clients */
-    static std::unordered_map<std::string, boost::asio::ip::tcp::socket*> clientList;
+    static std::map<std::string, boost::asio::ip::tcp::socket*> clientList;
 
     /* get the client list */
-    static std::unordered_map<std::string, boost::asio::ip::tcp::socket*> getClientList();   
+    static std::map<std::string, boost::asio::ip::tcp::socket*> getClientList();
 };
 
 #endif // SERVER_H

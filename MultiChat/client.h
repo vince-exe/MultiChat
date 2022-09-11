@@ -11,22 +11,17 @@ private:
     /* socket pointer */
     boost::asio::ip::tcp::socket* socketClient;
 
-    std::string nickname;
-
 public:
     Client();
 
     /* connect to a specific endpoint */
-    bool connect(const std::string& ipAddress, int port, std::string nickname);
+    bool connect(const std::string& ipAddress, int port);
 
     /* return the socket pointer */
     boost::asio::ip::tcp::socket *getSocket();
 
     /* close the socket */
     void close();
-
-    std::string getNickname();
-
 };
 
 #endif // CLIENT_H

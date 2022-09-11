@@ -1,6 +1,6 @@
 #include "server.h"
 
-std::unordered_map<std::string, boost::asio::ip::tcp::socket*> Server::clientList;
+std::map<std::string, boost::asio::ip::tcp::socket*> Server::clientList;
 
 Server::Server(std::string ipAddress, int port) {
     /* allocate the space for the acceptor */
@@ -14,18 +14,12 @@ void Server::listen() {
     this->acceptor->accept(*this->clientList.at(""));
 }
 
-bool Server::pushClientNickname(std::string nickname, const std::string& pos) {
-    /* if there is already a client with this nickname */
-    if(this->clientList.find(nickname) != this->clientList.end()) {
-        return false;
-    }
-
+void Server::pushClientNickname(std::string nickname, const std::string& pos) {
     /* extract the node of the new socket to store his nickname */
     auto node = this->clientList.extract(pos);
     node.key() = nickname;
 
     this->clientList.insert(std::move(node));
-    return true;
 }
 
 boost::asio::ip::tcp::socket *Server::getSocketAt(const std::string &pos) {
@@ -51,17 +45,30 @@ bool Server::eraseClient(const std::string &pos) {
     return true;
 }
 
-std::vector<std::string> Server::getUserNames() {
-    std::vector<std::string> clientNames;;
-    for(auto& it : this->clientList) {
-        clientNames.push_back(it.first);
-    }
-    /* remove the empty socket */
-    clientNames.erase(clientNames.begin());
-
-    return clientNames;
+bool Server::isClient(const std::string &pos) {
+    return (this->clientList.find(pos) != this->clientList.end());
 }
 
-std::unordered_map<std::string, boost::asio::ip::tcp::socket *> Server::getClientList() {
+void Server::setConnCount(int count) {
+    this->connectionCount = count;
+}
+
+int Server::getConnCount() {
+    return this->connectionCount;
+}
+
+std::string Server::getClientListSerialized(const char *c) {
+    std::string str;
+    for(auto& it : this->clientList) {
+        if(it.first != "") {
+            str.append(it.first);
+            str.append(c);
+        }
+    }
+
+    return str;
+}
+
+std::map<std::string, boost::asio::ip::tcp::socket *> Server::getClientList() {
     return Server::clientList;
 }

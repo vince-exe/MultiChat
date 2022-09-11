@@ -18,8 +18,29 @@ bool NicknameDialog::checkNickName(std::vector<std::string> *vec, std::string &s
             exist = true;
         }
     }
-
     return exist;
+}
+
+std::vector<std::string> NicknameDialog::deserializeClientList(const std::string& str, const char* dC) {
+    std::vector<std::string> vec;
+    std::string tmp;
+
+    for(int i = 0; i < str.length(); i++) {
+        if(str[i] == *dC) {
+            vec.push_back(tmp);
+            tmp.clear();
+            continue;
+        }
+        tmp.push_back(str[i]);
+    }
+    return vec;
+}
+
+bool NicknameDialog::nicknameExist(std::vector<std::string>* vec, const std::string& nick) {
+    for(auto& str : *vec) {
+        if(str == nick) { return true; }
+    }
+    return false;
 }
 
 NicknameDialog::NicknameDialog(QWidget *parent) :
@@ -53,6 +74,10 @@ void NicknameDialog::on_doneBtn_clicked() {
         QMessageBox::warning(0, "Warning", "The nickname can contain only a white space");
         return;
     }
+    else if(!ChatUtilities::checkStringCharacter(ui->nickBox->text(), ChatMessages::serializationChar.c_str(), 0)) {
+        QMessageBox::warning(0, "Warning", "Invalid nickname");
+        return;
+    }
     else if(ui->nickBox->text().length() < ChatUtilities::minNickLenght) {
         QMessageBox::warning(0, "Warning", "The nickname must contain at least " + QString::number(ChatUtilities::minNickLenght) + " characters");
         return;
@@ -61,33 +86,31 @@ void NicknameDialog::on_doneBtn_clicked() {
     /* check if the nickname already exist */
     Client client;
     /* connect to the server */
-    if(!client.connect(IpPortDialog::ipAddress, IpPortDialog::port, "TEST")) {
+    if(!client.connect(IpPortDialog::ipAddress, IpPortDialog::port)) {
         QMessageBox::critical(0, "Error", "The server is not responding...");
         client.close();
         return;
     }
     NicknameDialog::nickname = ui->nickBox->text().toStdString();
 
-    /* send the message to receive the list of users */
-    ChatUtilities::send(client.getSocket(), ChatMessages::giveUsersList + ChatMessages::termCharacter);
-    /* receive the size of the users list */
-    std::string sizeToStd = ChatUtilities::read_until(client.getSocket(), ChatMessages::termCharacter);
-    size_t sizeT;
+    /* send the message to get the client nicknames list */
+    boost::asio::write(*client.getSocket(), boost::asio::buffer(ChatMessages::getClientList + ChatMessages::termCharacter));
+    /* save the nickname list */
+    std::string nicknameList = ChatUtilities::read_until(client.getSocket(), ChatMessages::termCharacter);
+    nicknameList.resize(nicknameList.size() - 1);
 
-    /* convert the size from std::string to size_t */
-    sscanf(sizeToStd.c_str(), "%zu", &sizeT);
-    std::vector<std::string> clientNames(sizeT);
-
-    client.getSocket()->read_some( boost::asio::buffer(clientNames, sizeT));
     client.close();
 
-    /* check if the nick already exist */
-    if(NicknameDialog::checkNickName(&clientNames, nickname)) {
-        QMessageBox::warning(0, "Warning", "Nickname already exist");
+    /* deserialize the message and put it in a vector */
+    std::vector<std::string> nicknameListVec = NicknameDialog::deserializeClientList(nicknameList, ChatMessages::serializationChar.c_str());
+    /* check if the nick doesn't exist */
+    if(!NicknameDialog::nicknameExist(&nicknameListVec, NicknameDialog::nickname)) {
+        NicknameDialog::insertNickname = true;
+        this->close();
         return;
     }
-    NicknameDialog::insertNickname = true;
-    this->close();
+
+    QMessageBox::warning(0, "Warning", "This nickname already exist");
 }
 
 /* check the given nickname */

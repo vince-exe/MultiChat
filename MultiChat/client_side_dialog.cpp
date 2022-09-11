@@ -9,18 +9,14 @@
 #include "nickname_dialog.h"
 
 void listenServer(ClientSideDialog* object, Client* client) {
-    /* send the nickname */
-    std::string message;
-
-    /* check if the nickname already exist */
-    message = ChatUtilities::read_until(client->getSocket(), ChatMessages::termCharacter);
-    message.resize(message.size() - 1);
-    qDebug() << QString::fromStdString(message);
-    if(message == ChatMessages::nickAlreadyInUse) {
-        client->close();
-        QMessageBox::critical(0, "Error", "Nickname already in use");
+    /* try to connect */
+    if(!client->connect(IpPortDialog::ipAddress, IpPortDialog::port)) {
+        QMessageBox::critical(0, "Error", "The server is not responding...");
         return;
     }
+    /* send the nickname */
+    boost::asio::write(*client->getSocket(), boost::asio::buffer(NicknameDialog::nickname + ChatMessages::termCharacter));
+
     /* list of all the users */
 
     /* start listen the server */

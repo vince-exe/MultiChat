@@ -70,12 +70,12 @@ void IpPortDialog::on_doneBtn_clicked() {
         /* create a "test client" to verify the connection */
         Client client;
         /* connect to the server */
-        if(!client.connect(IpPortDialog::ipAddress, IpPortDialog::port, "TEST")) {
+        if(!client.connect(IpPortDialog::ipAddress, IpPortDialog::port)) {
             QMessageBox::critical(0, "Error", "The server is not responding...");
             client.close();
             return;
         }
-        ChatUtilities::send(client.getSocket(), ChatMessages::connectionTest + ChatMessages::termCharacter);
+        boost::asio::write(*client.getSocket(), boost::asio::buffer(ChatMessages::connectionTest + ChatMessages::termCharacter));
         client.close();
         IpPortDialog::doneBtnPressed = true;
     }
