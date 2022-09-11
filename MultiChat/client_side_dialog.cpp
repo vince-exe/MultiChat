@@ -11,7 +11,6 @@
 void fillClientList(std::vector<std::string>* vec, QStandardItemModel* model, QTableView* table) {
     int i = 0;
     for(auto& str : *vec) {
-        qDebug() << QString::fromStdString(str);
         model->setItem(i, ChatUtilities::getItem(QString::fromStdString(str)));
         i++;
     }
