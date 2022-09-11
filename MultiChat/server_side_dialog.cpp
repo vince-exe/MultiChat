@@ -175,3 +175,7 @@ void ServerSideDialog::on_searchUserBox_textChanged(const QString &arg1) {
     if(arg1.length() > ChatUtilities::maxNickLenght) { ui->searchUserBox->backspace(); }
 }
 
+/* when the user wants to close the window */
+void ServerSideDialog::ServerSideDialog::reject() {
+    QDialog::reject();
+}

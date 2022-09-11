@@ -48,3 +48,8 @@ ClientSideDialog::~ClientSideDialog() {
 void ClientSideDialog::on_sendMsgBtn_clicked() {
 
 }
+
+/* when the user wants to close the window */
+void ClientSideDialog::ClientSideDialog::reject() {
+    QDialog::reject();
+}

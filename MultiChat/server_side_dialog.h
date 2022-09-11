@@ -49,7 +49,7 @@ private slots:
     void on_searchUserBox_textChanged(const QString &arg1);
 
 private:
-
+    void reject();
 };
 
 /* accept the incoming connections */

@@ -30,7 +30,7 @@ private slots:
    void on_sendMsgBtn_clicked();
 
 private:
-
+    void reject();
 };
 
 /* listen the server messages */
