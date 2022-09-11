@@ -32,6 +32,8 @@ public:
 
     std::thread acceptThread;
 
+    Server* server;
+
     /* vector to store all the active threads */
     std::vector<std::thread> listenClientsThreads;
 
@@ -53,10 +55,10 @@ private:
 };
 
 /* accept the incoming connections */
-void acceptClients(std::string ip, int port, ServerSideDialog* objcet);
+void acceptClients(Server* server, ServerSideDialog* objcet);
 
 /* listen the messages of a single client */
-void listenClient(const std::string nickname, Server& server, ServerSideDialog* object);
+void listenClient(const std::string nickname, Server* server, ServerSideDialog* object);
 
 void printClientList(QStandardItemModel* model, std::unordered_map<std::string, boost::asio::ip::tcp::socket*> map, QTableView* table);
 

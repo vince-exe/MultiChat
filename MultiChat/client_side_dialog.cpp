@@ -45,11 +45,29 @@ ClientSideDialog::~ClientSideDialog() {
     delete ui;
 }
 
+/* send the message */
 void ClientSideDialog::on_sendMsgBtn_clicked() {
+    /* check that the message is not empty */
+    if(!ui->messageBox->text().length()) {
+        return;
+    }
 
+    std::string msg = ui->messageBox->text().toStdString();
+    /* send the content to the server */
+    boost::asio::write(*client->getSocket(), boost::asio::buffer(msg + ChatMessages::termCharacter));
+
+    /* display the content to the screen */
+    QTextCursor textCursor = QTextCursor(ui->chatBox->document());
+    textCursor.movePosition(QTextCursor::End);
+    textCursor.insertText("[ You ]: " + QString::fromStdString(msg) + "\n");
 }
 
 /* when the user wants to close the window */
 void ClientSideDialog::ClientSideDialog::reject() {
     QDialog::reject();
 }
+
+void ClientSideDialog::on_resetMsgBtn_clicked() {
+    ui->messageBox->clear();
+}
+

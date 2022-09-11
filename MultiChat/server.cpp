@@ -1,7 +1,5 @@
 #include "server.h"
 
-std::map<std::string, boost::asio::ip::tcp::socket*> Server::clientList;
-
 Server::Server(std::string ipAddress, int port) {
     /* allocate the space for the acceptor */
     this->acceptor = new boost::asio::ip::tcp::acceptor(this->ioContext, boost::asio::ip::tcp::endpoint(boost::asio::ip::address::from_string(ipAddress), port));

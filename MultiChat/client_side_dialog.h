@@ -29,6 +29,8 @@ public:
 private slots:
    void on_sendMsgBtn_clicked();
 
+   void on_resetMsgBtn_clicked();
+
 private:
     void reject();
 };

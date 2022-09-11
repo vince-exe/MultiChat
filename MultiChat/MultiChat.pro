@@ -40,8 +40,8 @@ FORMS += \
     options_server_dialog.ui \
     server_side_dialog.ui
 
-INCLUDEPATH += D:/Programs/C++Libraries/boost_1_80_0
-LIBS += -LD:/Programs/C++Libraries/boost_1_80_0/stage/lib
+INCLUDEPATH += C:/Users/Vincenzo/OneDrive/Documenti/C++Libraries/boost_1_80_0
+LIBS += -LC:/Users/Vincenzo/OneDrive/Documenti/C++Libraries/boost_1_80_0/stage/lib
 LIBS += -llibboost_filesystem-mgw6-mt-x32-1_80 -lws2_32
 
 # Default rules for deployment.

@@ -18,6 +18,9 @@ private:
     /* keep trace of the connections */
     int connectionCount = 0;
 
+    /* used to store the clients */
+    std::map<std::string, boost::asio::ip::tcp::socket*> clientList;
+
 public:
     Server(std::string ipAddress, int port);
 
@@ -43,12 +46,8 @@ public:
     /* serialize the client nicknames list */
     std::string getClientListSerialized(const char* c);
 
-public:
-    /* used to store the clients */
-    static std::map<std::string, boost::asio::ip::tcp::socket*> clientList;
-
     /* get the client list */
-    static std::map<std::string, boost::asio::ip::tcp::socket*> getClientList();
+    std::map<std::string, boost::asio::ip::tcp::socket*> getClientList();
 };
 
 #endif // SERVER_H
