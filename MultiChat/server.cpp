@@ -68,5 +68,5 @@ std::string Server::getClientListSerialized(const char *c) {
 }
 
 std::map<std::string, boost::asio::ip::tcp::socket *> Server::getClientList() {
-    return Server::clientList;
+    return this->clientList;
 }

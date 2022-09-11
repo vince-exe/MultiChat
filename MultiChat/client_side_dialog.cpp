@@ -17,11 +17,21 @@ void listenServer(ClientSideDialog* object, Client* client) {
     /* send the nickname */
     boost::asio::write(*client->getSocket(), boost::asio::buffer(NicknameDialog::nickname + ChatMessages::termCharacter));
 
+    std::string msg;
+
     /* list of all the users */
 
     /* start listen the server */
     while(true) {
+        msg = ChatUtilities::read_until(client->getSocket(), ChatMessages::termCharacter);
+        msg.resize(msg.size() - 1);
 
+        if(msg == ChatMessages::clientAccepted) { continue; }
+
+        /* display the message in the chat */
+        QTextCursor textCursor = QTextCursor(object->ui->chatBox->document());
+        textCursor.movePosition(QTextCursor::End);
+        textCursor.insertText(QString::fromStdString(msg)+ "\n");
     }
 }
 
@@ -60,6 +70,9 @@ void ClientSideDialog::on_sendMsgBtn_clicked() {
     QTextCursor textCursor = QTextCursor(ui->chatBox->document());
     textCursor.movePosition(QTextCursor::End);
     textCursor.insertText("[ You ]: " + QString::fromStdString(msg) + "\n");
+
+    /* clear the text box */
+    ui->messageBox->clear();
 }
 
 /* when the user wants to close the window */

@@ -60,6 +60,9 @@ void acceptClients(Server* server, ServerSideDialog* objcet);
 /* listen the messages of a single client */
 void listenClient(const std::string nickname, Server* server, ServerSideDialog* object);
 
+/* function to send the incoming message to all the clients */
+void sendToAll(Server* server, const std::string& message, const std::string& nickname);
+
 void printClientList(QStandardItemModel* model, std::unordered_map<std::string, boost::asio::ip::tcp::socket*> map, QTableView* table);
 
 void printSearchedClients(const std::string& clientSearched, QStandardItemModel* model, std::unordered_map<std::string, boost::asio::ip::tcp::socket*> map, QTableView* table);

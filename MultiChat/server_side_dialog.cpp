@@ -93,6 +93,20 @@ void listenClient(const std::string nickname, Server* server, ServerSideDialog* 
         QTextCursor textCursor = QTextCursor(object->ui->chatBox->document());
         textCursor.movePosition(QTextCursor::End);
         textCursor.insertText("[ " + QString::fromStdString(nickname) + " ]: " + QString::fromStdString(message) + "\n");
+
+        /* send the message to the other clients */
+        sendToAll(server, message, nickname);
+    }
+}
+
+/* function to send the incoming message to all the clients */
+void sendToAll(Server* server, const std::string& message, const std::string& nickname) {
+    /* iterate over client list */
+    for(auto it : server->getClientList()) {
+        /* check that message doesn't go at the author and doesn't go at the test socket */
+        if(it.first == nickname || it.first == "") { continue; }
+
+        boost::asio::write(*it.second, boost::asio::buffer("[ " + nickname + " ]: " + message + ChatMessages::termCharacter));
     }
 }
 
