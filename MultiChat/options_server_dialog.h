@@ -17,6 +17,10 @@ public:
 
     static bool serverOpened;
 
+    static bool wantToCLose;
+
+    static bool reopenServer;
+
 private slots:
     void on_startServerBtn_clicked();
 

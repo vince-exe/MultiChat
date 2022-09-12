@@ -3,12 +3,15 @@
 
 #include "chat_utilities.h"
 #include "server.h"
+#include "client.h"
 
 /* forms */
 #include "options_server_dialog.h"
 #include "ip_port_dialog.h"
 
 bool ServerSideDialog::isServerOpen = false;
+
+bool ServerSideDialog::guiLoaded = true;
 
 void printClientList(QStandardItemModel* model, std::map<std::string, boost::asio::ip::tcp::socket*> map, QTableView* table) {
     int i = 0;
@@ -33,15 +36,28 @@ void printSearchedClients(const std::string &clientSearched, QStandardItemModel 
 }
 
 void acceptClients(Server* server, ServerSideDialog* object) {
-    /* open the server at the given ip and port */
-
     while(true) {
         /* listen for connection */
         server->listen();
+
         /* get the nickname from the new socket */
         std::string message = ChatUtilities::read_until(server->getSocketAt(""), ChatMessages::termCharacter);
         /* remove the term character */
         message.resize(message.size() - 1);
+
+        /* check if the server is open */
+        if(!server->isOpen()) {
+            boost::asio::write(*server->getSocketAt(""), boost::asio::buffer(ChatMessages::closeServer + ChatMessages::termCharacter));
+            server->eraseClient("");
+            continue;
+        }
+
+        if(message == ChatMessages::closeServer) {
+            /* stop listening for new connections */
+            server->eraseClient("");
+            server->stop();
+            continue;
+        }
 
         if(message == ChatMessages::connectionTest) {
             /* remove the new socket from the map */
@@ -191,9 +207,33 @@ void ServerSideDialog::on_optionsBtn_clicked() {
     if(OptionsServerDialog::serverOpened) {
         ServerSideDialog::isServerOpen = true;
 
-        /* create the thread to listen the clients */
-        this->acceptThread = std::thread(acceptClients, this->server, this);
+        /* activate the acceptor only once */
+        if(ServerSideDialog::guiLoaded) {
+            this->server->activeAcceptor();
+            /* create the thread to listen the clients */
+            this->acceptThread = std::thread(acceptClients, this->server, this);
+            ServerSideDialog::guiLoaded = !ServerSideDialog::guiLoaded;
+        }
+
+        /* open the server */
+        this->server->open();
         ui->statusLabel->setStyleSheet("background-color: rgb(6, 86, 1);");
+        return;
+    }
+
+    /* if the user wants to close the server */
+    if(OptionsServerDialog::wantToCLose) {
+        ServerSideDialog::isServerOpen = false;
+
+        /* create a temp client to stop the connection */
+        Client client;
+        client.connect(IpPortDialog::ipAddress, IpPortDialog::port);
+        /* send the close message */
+        boost::asio::write(*client.getSocket(), boost::asio::buffer(ChatMessages::closeServer + ChatMessages::termCharacter));
+        ui->statusLabel->setStyleSheet("background-color: rgb(125, 0, 0);");
+
+        /* close the client and return */
+        client.close();
         return;
     }
 }

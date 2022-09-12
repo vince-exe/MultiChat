@@ -21,11 +21,28 @@ private:
     /* used to store the clients */
     std::map<std::string, boost::asio::ip::tcp::socket*> clientList;
 
+    std::string ip;
+
+    int port;
+
+    bool isOpen_;
+
 public:
     Server(std::string ipAddress, int port);
 
     /* listen for new connections */
     void listen();
+
+    /* close the acceptor */
+    void stop();
+
+    /* open the acceptor */
+    void open();
+
+    /* active the acceptor */
+    void activeAcceptor();
+
+    bool isOpen() const;
 
     /* save the nickname of the client */
     void pushClientNickname(std::string nickname, const std::string& pos);

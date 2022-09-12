@@ -39,6 +39,8 @@ public:
 
     Ui::ServerSideDialog *ui;
 
+    static bool guiLoaded;
+
 private slots:
     void on_optionsBtn_clicked();
 

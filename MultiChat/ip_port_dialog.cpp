@@ -76,9 +76,22 @@ void IpPortDialog::on_doneBtn_clicked() {
             return;
         }
         boost::asio::write(*client.getSocket(), boost::asio::buffer(ChatMessages::connectionTest + ChatMessages::termCharacter));
-        client.close();
-        IpPortDialog::doneBtnPressed = true;
-    }
 
+        std::string msg;
+        try {
+            msg = ChatUtilities::read_until(client.getSocket(), ChatMessages::termCharacter);
+            msg.resize(msg.size() - 1);
+
+            if(msg == ChatMessages::closeServer) {
+                QMessageBox::critical(0, "Error", "The server is not responding...");
+                client.close();
+                return;
+            }
+        }
+        catch(boost::system::system_error) {
+            client.close();
+            IpPortDialog::doneBtnPressed = true;
+        }
+    }
     this->close(); return;
 }

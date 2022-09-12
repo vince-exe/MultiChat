@@ -54,6 +54,8 @@ namespace ChatMessages {
     const std::string acceptClientDisconnection = "[.[AcceptClientDisconnection].]";
 
     const std::string clientLeft = "[.[ClientLeft].]";
+
+    const std::string closeServer = "[.[ServerClose].]";
 }
 
 #endif // CHAT_UTILITIES_H

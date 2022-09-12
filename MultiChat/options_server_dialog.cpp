@@ -7,12 +7,17 @@
 
 bool OptionsServerDialog::serverOpened = false;
 
+bool OptionsServerDialog::wantToCLose = false;
+
+bool OptionsServerDialog::reopenServer = false;
+
 OptionsServerDialog::OptionsServerDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::OptionsServerDialog) {
     ui->setupUi(this);
 
     OptionsServerDialog::serverOpened = false;
+    OptionsServerDialog::wantToCLose = false;
 }
 
 OptionsServerDialog::~OptionsServerDialog() {
@@ -32,7 +37,15 @@ void OptionsServerDialog::on_startServerBtn_clicked() {
 }
 
 void OptionsServerDialog::on_closeServerBtn_clicked() {
+    if(!ServerSideDialog::isServerOpen) {
+        QMessageBox::warning(0, "Warning", "The server is already closed");
+        OptionsServerDialog::serverOpened = false;
+        return;
+    }
 
+    QMessageBox::information(0, "Success", "Successfully closed the server");
+    OptionsServerDialog::wantToCLose = true;
+    this->close();
 }
 
 void OptionsServerDialog::on_backupChatBtn_clicked() {

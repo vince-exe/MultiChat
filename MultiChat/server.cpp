@@ -1,15 +1,35 @@
 #include "server.h"
+#include <QString>
+#include <QDebug>
 
 Server::Server(std::string ipAddress, int port) {
-    /* allocate the space for the acceptor */
-    this->acceptor = new boost::asio::ip::tcp::acceptor(this->ioContext, boost::asio::ip::tcp::endpoint(boost::asio::ip::address::from_string(ipAddress), port));
+    /* save the informations */
+    this->ip = ipAddress;
+    this->port = port;
 }
 
 void Server::listen() {
     /* temporary allocate the space for a socket to accept the connection */
     this->clientList.insert(std::pair<std::string, boost::asio::ip::tcp::socket*>("", new boost::asio::ip::tcp::socket(this->ioContext)));
+
     /* accept the connection with the new socket */
     this->acceptor->accept(*this->clientList.at(""));
+}
+
+void Server::stop() {
+    this->isOpen_ = false;
+}
+
+void Server::open() {
+    this->isOpen_ = true;
+}
+
+void Server::activeAcceptor() {
+    this->acceptor = new boost::asio::ip::tcp::acceptor(this->ioContext, boost::asio::ip::tcp::endpoint(boost::asio::ip::address::from_string(this->ip), this->port));
+}
+
+bool Server::isOpen() const {
+    return this->isOpen_;
 }
 
 void Server::pushClientNickname(std::string nickname, const std::string& pos) {
