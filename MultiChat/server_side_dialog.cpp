@@ -62,7 +62,6 @@ void acceptClients(Server* server, ServerSideDialog* object) {
         /* push the new client */
         server->pushClientNickname(message, "");
 
-        /* send the
         /* push the client inside the clients list */
         object->modelUsers->setItem(server->getConnCount(), ChatUtilities::getItem(QString::fromStdString(message)));
         object->ui->userTable->setModel(object->modelUsers);
@@ -90,7 +89,28 @@ void listenClient(const std::string nickname, Server* server, ServerSideDialog* 
             /* send the client list */
             message = server->getClientListSerialized(ChatMessages::serializationChar.c_str());
             boost::asio::write(*socketClient, boost::asio::buffer(message + ChatMessages::termCharacter));
+
+            /* send the numbers of connected client */
+            boost::asio::write(*socketClient, boost::asio::buffer(std::to_string(server->getConnCount()) + ChatMessages::termCharacter));
             continue;
+        }
+
+        if(message == ChatMessages::clientDisconnect) {
+            boost::asio::write(*socketClient, boost::asio::buffer(ChatMessages::acceptClientDisconnection + ChatMessages::termCharacter));
+            /* deallocate the socket */
+            server->eraseClient(nickname);
+            /* free the table */
+            ChatUtilities::clearQTableView(object->ui->userTable, object->modelUsers, server->getConnCount());
+            /* reprint the client list */
+            printClientList(object->modelUsers, server->getClientList(), object->ui->userTable);
+
+            /* update the connection count */
+            server->setConnCount(server->getConnCount() - 1);
+            /* send to all the users the disconnection message */
+            sendToAll(server, "[ Server ] The user " + nickname + " left the chat" + ChatMessages::termCharacter, nickname);
+            /* send to all the message that a client left */
+            sendToAll(server, ChatMessages::clientLeft + ChatMessages::termCharacter, nickname);
+            return;
         }
 
         /* display the content to the screen */

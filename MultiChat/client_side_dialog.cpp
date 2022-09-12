@@ -41,22 +41,31 @@ void listenServer(ClientSideDialog* object, Client* client) {
         msg = ChatUtilities::read_until(client->getSocket(), ChatMessages::termCharacter);
         msg.resize(msg.size() - 1);
 
-        if(msg == ChatMessages::clientJoined) {
+        if(msg == ChatMessages::clientJoined || msg == ChatMessages::clientLeft) {
             /* request the new client list */
             boost::asio::write(*client->getSocket(), boost::asio::buffer(ChatMessages::clientListUpdt + ChatMessages::termCharacter));
 
             std::string clientListStr = ChatUtilities::read_until(client->getSocket(), ChatMessages::termCharacter);
             clientListStr.resize(clientListStr.size() - 1);
-
             clientList = NicknameDialog::deserializeClientList(clientListStr, ChatMessages::serializationChar.c_str());
 
+            std::string connCount = ChatUtilities::read_until(client->getSocket(), ChatMessages::termCharacter);
+            connCount.resize(connCount.size() - 1);
+
+            /* clear the list */
+            ChatUtilities::clearQTableView(object->ui->userTableClient, object->modelUsersClient, std::atoi(connCount.c_str())
+                                           );
             fillClientList(&clientList, object->modelUsersClient, object->ui->userTableClient);
             clientList.clear();
             continue;
         }
 
+        if(msg == ChatMessages::acceptClientDisconnection) {
+            return;
+        }
+
         /* display the message in the chat */
-        QTextCursor textCursor = QTextCursor(object->ui->chatBox->document());
+        QTextCursor textCursor = QTextCursor(object->ui->chatBoxClient->document());
         textCursor.movePosition(QTextCursor::End);
         textCursor.insertText(QString::fromStdString(msg)+ "\n");
     }
@@ -99,32 +108,53 @@ ClientSideDialog::~ClientSideDialog() {
     delete ui;
 }
 
+/* when the user wants to close the window */
+void ClientSideDialog::ClientSideDialog::reject() {
+    /* check if the user wants to exit */
+    QMessageBox confirmBox;
+    confirmBox.setText(tr("If you close this window, you will bel disconnected from the chat, are you sure?"));
+    confirmBox.addButton(tr("Yes"), QMessageBox::YesRole);
+
+    QAbstractButton* noBtn = confirmBox.addButton(tr("No"), QMessageBox::YesRole);
+    /* show the message box */
+    confirmBox.exec();
+    /* if the user doesn't want to save the money, close */
+    if(confirmBox.clickedButton() == noBtn) { return; }
+
+    /* send the disconnect message */
+    boost::asio::write(*this->client->getSocket(), boost::asio::buffer(ChatMessages::clientDisconnect + ChatMessages::termCharacter));
+
+    /* wait to close the listen thread */
+    if(this->listenThread.joinable()) {
+        this->listenThread.join();
+    }
+    /* close the client and dealloc the socket */
+    client->close();
+    QDialog::reject();
+}
+
 /* send the message */
-void ClientSideDialog::on_sendMsgBtn_clicked() {
+void ClientSideDialog::on_sendMsgBtnClient_clicked() {
     /* check that the message is not empty */
-    if(!ui->messageBox->text().length()) {
+    if(!ui->messageBoxClient->text().length()) {
         return;
     }
 
-    std::string msg = ui->messageBox->text().toStdString();
+    std::string msg = ui->messageBoxClient->text().toStdString();
     /* send the content to the server */
     boost::asio::write(*client->getSocket(), boost::asio::buffer(msg + ChatMessages::termCharacter));
 
     /* display the content to the screen */
-    QTextCursor textCursor = QTextCursor(ui->chatBox->document());
+    QTextCursor textCursor = QTextCursor(ui->chatBoxClient->document());
     textCursor.movePosition(QTextCursor::End);
     textCursor.insertText("[ You ] " + QString::fromStdString(msg) + "\n");
 
     /* clear the text box */
-    ui->messageBox->clear();
+    ui->messageBoxClient->clear();
 }
 
-/* when the user wants to close the window */
-void ClientSideDialog::ClientSideDialog::reject() {
-    QDialog::reject();
-}
 
-void ClientSideDialog::on_resetMsgBtn_clicked() {
-    ui->messageBox->clear();
+void ClientSideDialog::on_resetMsgBtnClient_clicked() {
+    ui->messageBoxClient->clear();
 }
 

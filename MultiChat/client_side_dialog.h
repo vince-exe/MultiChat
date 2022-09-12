@@ -34,9 +34,10 @@ public:
    QStringList verticalHeaderUsers;
 
 private slots:
-   void on_sendMsgBtn_clicked();
 
-   void on_resetMsgBtn_clicked();
+   void on_sendMsgBtnClient_clicked();
+
+   void on_resetMsgBtnClient_clicked();
 
 private:
     void reject();

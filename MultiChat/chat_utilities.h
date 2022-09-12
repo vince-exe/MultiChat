@@ -6,6 +6,7 @@
 #include <QString>
 #include <string>
 #include <QStandardItemModel>
+#include <QTableView>
 
 namespace ChatUtilities {
     /* read message from a socket */
@@ -19,6 +20,9 @@ namespace ChatUtilities {
 
     /* return an item model */
     QStandardItem *getItem(QString string);
+
+    /* clear the given QTableView from it widgets */
+    void clearQTableView(QTableView* table, QStandardItemModel* model, int max);
 
     /* max lenght for a nickname */
     const int maxNickLenght = 16;
@@ -44,6 +48,12 @@ namespace ChatMessages {
     const std::string clientJoined = "[.[ClientJoined].]";
 
     const std::string clientListUpdt = "[.[UpdatedClientList].]";
+
+    const std::string clientDisconnect = "[.[ClientDisconnect].]";
+
+    const std::string acceptClientDisconnection = "[.[AcceptClientDisconnection].]";
+
+    const std::string clientLeft = "[.[ClientLeft].]";
 }
 
 #endif // CHAT_UTILITIES_H

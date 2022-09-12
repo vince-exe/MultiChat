@@ -26,3 +26,13 @@ QStandardItem *ChatUtilities::getItem(QString string) {
 
     return item;
 }
+
+void ChatUtilities::clearQTableView(QTableView *table, QStandardItemModel* model,int max) {
+    for(int i = 0; i < max; i++) {
+        QWidget* w = table->indexWidget(model->index(i, 0));
+        model->removeRow(i);
+        if(w) {
+            delete w;
+        }
+    }
+}
