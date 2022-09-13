@@ -56,6 +56,8 @@ private slots:
 
     void on_resetMsgBtn_clicked();
 
+    void on_userTable_activated(const QModelIndex &index);
+
 private:
     void reject();
 };

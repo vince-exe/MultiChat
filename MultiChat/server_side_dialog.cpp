@@ -338,3 +338,9 @@ void ServerSideDialog::on_resetMsgBtn_clicked() {
     ui->messageBox->clear();
 }
 
+
+void ServerSideDialog::on_userTable_activated(const QModelIndex &index) {
+    QString clientName = index.sibling(index.row(), 0).data().toString();
+    qDebug() << clientName;
+}
+
