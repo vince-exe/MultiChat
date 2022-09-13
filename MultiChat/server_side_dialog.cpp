@@ -320,3 +320,21 @@ void ServerSideDialog::ServerSideDialog::reject() {
     shutdownServer(this);
     this->close();
 }
+
+void ServerSideDialog::on_sendMsgBtn_clicked() {
+    std::string msg = ui->messageBox->text().toStdString();
+    if(!msg.length()) { return; }
+
+    sendToAll(this->server, "[ Server ] " + msg + ChatMessages::termCharacter, "");
+
+    /* display the content to the screen */
+    QTextCursor textCursor = QTextCursor(this->ui->chatBox->document());
+    textCursor.movePosition(QTextCursor::End);
+    textCursor.insertText("[ Server ] " + QString::fromStdString(msg) + "\n");
+    this->ui->messageBox->clear();
+}
+
+void ServerSideDialog::on_resetMsgBtn_clicked() {
+    ui->messageBox->clear();
+}
+
