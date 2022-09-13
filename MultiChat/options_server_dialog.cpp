@@ -5,11 +5,11 @@
 
 #include <QMessageBox>
 
-bool OptionsServerDialog::serverOpened = false;
+bool OptionsServerDialog::serverOpened;
 
-bool OptionsServerDialog::wantToCLose = false;
+bool OptionsServerDialog::wantToCLose;
 
-bool OptionsServerDialog::reopenServer = false;
+bool OptionsServerDialog::wantShutdown;
 
 OptionsServerDialog::OptionsServerDialog(QWidget *parent) :
     QDialog(parent),
@@ -18,6 +18,7 @@ OptionsServerDialog::OptionsServerDialog(QWidget *parent) :
 
     OptionsServerDialog::serverOpened = false;
     OptionsServerDialog::wantToCLose = false;
+    OptionsServerDialog::wantShutdown = false;
 }
 
 OptionsServerDialog::~OptionsServerDialog() {
@@ -56,3 +57,24 @@ void OptionsServerDialog::on_backupUsersBtn_clicked() {
 
 }
 
+/* shutdown the server */
+void OptionsServerDialog::on_shutdownBtn_clicked() {
+    if(!ServerSideDialog::isServerOpen) {
+        QMessageBox::warning(0, "Warning", "Can't shutdown a closed server");
+        OptionsServerDialog::serverOpened = false;
+        return;
+    }
+
+    QMessageBox confirmBox;
+    confirmBox.setText(tr("The application will proceed with shutdown the server, are you sure?"));
+    confirmBox.addButton(tr("Yes"), QMessageBox::YesRole);
+
+    QAbstractButton* noBtn = confirmBox.addButton(tr("No"), QMessageBox::YesRole);
+    /* show the message box */
+    confirmBox.exec();
+    if(confirmBox.clickedButton() == noBtn) { return; }
+
+    QMessageBox::information(0, "Success", "Successfully shutdown the server");
+    OptionsServerDialog::wantShutdown = true;
+    this->close();
+}

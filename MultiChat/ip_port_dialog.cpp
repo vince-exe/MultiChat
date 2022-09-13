@@ -83,7 +83,7 @@ void IpPortDialog::on_doneBtn_clicked() {
             msg.resize(msg.size() - 1);
 
             if(msg == ChatMessages::closeServer) {
-                QMessageBox::critical(0, "Error", "The server is not responding...");
+                QMessageBox::critical(0, "Error", "The server is closed");
                 client.close();
                 return;
             }

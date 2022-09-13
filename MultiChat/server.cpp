@@ -28,6 +28,11 @@ void Server::activeAcceptor() {
     this->acceptor = new boost::asio::ip::tcp::acceptor(this->ioContext, boost::asio::ip::tcp::endpoint(boost::asio::ip::address::from_string(this->ip), this->port));
 }
 
+void Server::shutdown() {
+    this->acceptor->close();
+    delete this->acceptor;
+}
+
 bool Server::isOpen() const {
     return this->isOpen_;
 }

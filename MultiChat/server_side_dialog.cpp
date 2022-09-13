@@ -1,6 +1,8 @@
 #include "server_side_dialog.h"
 #include "ui_server_side_dialog.h"
 
+#include <QMessageBox>
+
 #include "chat_utilities.h"
 #include "server.h"
 #include "client.h"
@@ -12,6 +14,8 @@
 bool ServerSideDialog::isServerOpen = false;
 
 bool ServerSideDialog::guiLoaded = true;
+
+bool ServerSideDialog::serverShutdown;
 
 void printClientList(QStandardItemModel* model, std::map<std::string, boost::asio::ip::tcp::socket*> map, QTableView* table) {
     int i = 0;
@@ -59,11 +63,20 @@ void acceptClients(Server* server, ServerSideDialog* object) {
             continue;
         }
 
+        if(message == ChatMessages::shutdownServer) {
+            /* warn all the users */
+            sendToAll(server, ChatMessages::shutdownServer + ChatMessages::termCharacter, "");
+            server->eraseClient("");
+            server->shutdown();
+            return;
+        }
+
         if(message == ChatMessages::connectionTest) {
             /* remove the new socket from the map */
             server->eraseClient("");
             continue;
         }
+
         if(message == ChatMessages::getClientList) {
             /* send the list of nicknames */
             boost::asio::write(*server->getSocketAt(""), boost::asio::buffer(server->getClientListSerialized(ChatMessages::serializationChar.c_str()) + ChatMessages::termCharacter));
@@ -100,6 +113,11 @@ void listenClient(const std::string nickname, Server* server, ServerSideDialog* 
         /* read the content */
         message = ChatUtilities::read_until(socketClient, ChatMessages::termCharacter);
         message.resize(message.size() - 1);
+
+        if(message == ChatMessages::shutdownServer) {
+            server->eraseClient(nickname);
+            return;
+        }
 
         if(message == ChatMessages::clientListUpdt) {
             /* send the client list */
@@ -203,7 +221,7 @@ void ServerSideDialog::on_optionsBtn_clicked() {
     optServerDialog.show();
     optServerDialog.exec();
 
-    /* if the user wants to open the server */
+    /* Open Server */
     if(OptionsServerDialog::serverOpened) {
         ServerSideDialog::isServerOpen = true;
 
@@ -221,7 +239,7 @@ void ServerSideDialog::on_optionsBtn_clicked() {
         return;
     }
 
-    /* if the user wants to close the server */
+    /* Close Server */
     if(OptionsServerDialog::wantToCLose) {
         ServerSideDialog::isServerOpen = false;
 
@@ -234,6 +252,15 @@ void ServerSideDialog::on_optionsBtn_clicked() {
 
         /* close the client and return */
         client.close();
+        return;
+    }
+
+    /* Shutdown Server */
+    if(OptionsServerDialog::wantShutdown) {
+        ServerSideDialog::serverShutdown = true;
+        shutdownServer(this);
+
+        this->reject();
         return;
     }
 }
@@ -255,7 +282,41 @@ void ServerSideDialog::on_searchUserBox_textChanged(const QString &arg1) {
     if(arg1.length() > ChatUtilities::maxNickLenght) { ui->searchUserBox->backspace(); }
 }
 
+void shutdownServer(ServerSideDialog *object) {
+    if(!object->isServerOpen) { return; }
+
+    /* create a temp client to shutdown the connection */
+    Client client;
+
+    client.connect(IpPortDialog::ipAddress, IpPortDialog::port);
+    boost::asio::write(*client.getSocket(), boost::asio::buffer(ChatMessages::shutdownServer + ChatMessages::termCharacter));
+    client.close();
+
+    if(object->acceptThread.joinable()) {
+        object->acceptThread.join();
+    }
+
+    for(auto& thread : object->listenClientsThreads) {
+        if(thread.joinable()) {
+            thread.join();
+        }
+    }
+    return;
+}
+
 /* when the user wants to close the window */
 void ServerSideDialog::ServerSideDialog::reject() {
-    QDialog::reject();
+    QMessageBox confirmBox;
+    ServerSideDialog::serverShutdown = true;
+
+    confirmBox.setText(tr("The application will proceed with shutdown the server, are you sure?"));
+    confirmBox.addButton(tr("Yes"), QMessageBox::YesRole);
+
+    QAbstractButton* noBtn = confirmBox.addButton(tr("No"), QMessageBox::YesRole);
+    /* show the message box */
+    confirmBox.exec();
+    if(confirmBox.clickedButton() == noBtn) { return; }
+
+    shutdownServer(this);
+    this->close();
 }

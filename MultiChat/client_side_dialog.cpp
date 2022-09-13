@@ -64,6 +64,15 @@ void listenServer(ClientSideDialog* object, Client* client) {
             return;
         }
 
+        if(msg == ChatMessages::shutdownServer) {
+            boost::asio::write(*client->getSocket(), boost::asio::buffer(ChatMessages::shutdownServer + ChatMessages::termCharacter));
+            client->close();
+
+            QMessageBox::information(0, "Info", "The server has been closed");
+            object->close();
+            return;
+        }
+
         /* display the message in the chat */
         QTextCursor textCursor = QTextCursor(object->ui->chatBoxClient->document());
         textCursor.movePosition(QTextCursor::End);
@@ -118,7 +127,6 @@ void ClientSideDialog::ClientSideDialog::reject() {
     QAbstractButton* noBtn = confirmBox.addButton(tr("No"), QMessageBox::YesRole);
     /* show the message box */
     confirmBox.exec();
-    /* if the user doesn't want to save the money, close */
     if(confirmBox.clickedButton() == noBtn) { return; }
 
     /* send the disconnect message */

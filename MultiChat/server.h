@@ -42,6 +42,8 @@ public:
     /* active the acceptor */
     void activeAcceptor();
 
+    void shutdown();
+
     bool isOpen() const;
 
     /* save the nickname of the client */

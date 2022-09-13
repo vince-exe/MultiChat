@@ -37,9 +37,11 @@ public:
 
     static bool isServerOpen;
 
-    Ui::ServerSideDialog *ui;
-
     static bool guiLoaded;
+
+    static bool serverShutdown;
+
+    Ui::ServerSideDialog *ui;
 
 private slots:
     void on_optionsBtn_clicked();
@@ -63,8 +65,12 @@ void listenClient(const std::string nickname, Server* server, ServerSideDialog* 
 /* function to send the incoming message to all the clients */
 void sendToAll(Server* server, const std::string& message, const std::string& nickname);
 
+/* print the client list */
 void printClientList(QStandardItemModel* model, std::unordered_map<std::string, boost::asio::ip::tcp::socket*> map, QTableView* table);
 
+/* print the searched client */
 void printSearchedClients(const std::string& clientSearched, QStandardItemModel* model, std::unordered_map<std::string, boost::asio::ip::tcp::socket*> map, QTableView* table);
+
+void shutdownServer(ServerSideDialog* object);
 
 #endif // SERVER_SIDE_DIALOG_H

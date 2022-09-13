@@ -19,7 +19,7 @@ public:
 
     static bool wantToCLose;
 
-    static bool reopenServer;
+    static bool wantShutdown;
 
 private slots:
     void on_startServerBtn_clicked();
@@ -29,6 +29,8 @@ private slots:
     void on_backupChatBtn_clicked();
 
     void on_backupUsersBtn_clicked();
+
+    void on_shutdownBtn_clicked();
 
 private:
     Ui::OptionsServerDialog *ui;

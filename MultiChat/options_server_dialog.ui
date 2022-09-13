@@ -160,7 +160,7 @@ QPushButton::hover {
     <string>Backup Users</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="backupChatBtn_2">
+  <widget class="QPushButton" name="shutdownBtn">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -185,7 +185,7 @@ QPushButton::hover {
     <string>Shutdown</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="backupChatBtn_3">
+  <widget class="QPushButton" name="backupWordsBtn">
    <property name="geometry">
     <rect>
      <x>160</x>

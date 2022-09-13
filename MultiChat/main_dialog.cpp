@@ -41,6 +41,10 @@ void MainDialog::on_createBtn_clicked() {
 
     serverSideDialog.show();
     serverSideDialog.exec();
+
+    if(ServerSideDialog::serverShutdown) {
+        this->close(); return;
+    }
 }
 
 void MainDialog::on_connectBtn_clicked() {
