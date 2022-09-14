@@ -362,3 +362,11 @@ void ServerSideDialog::on_muteListBtn_clicked() {
     muteListDialog.show();
     muteListDialog.exec();
 }
+
+/* Key Press event */
+void ServerSideDialog::keyPressEvent(QKeyEvent *event) {
+    /* check if the user pressed ENTER */
+    if((event->key() == Qt::Key_Enter) || (event->key() == Qt::Key_Return)) {
+        this->on_sendMsgBtn_clicked();
+    }
+}

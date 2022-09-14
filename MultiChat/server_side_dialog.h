@@ -70,6 +70,8 @@ private slots:
 
 private:
     void reject();
+
+    void keyPressEvent(QKeyEvent* event);
 };
 
 /* accept the incoming connections */

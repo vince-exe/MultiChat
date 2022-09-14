@@ -190,3 +190,9 @@ void ClientSideDialog::on_resetMsgBtnClient_clicked() {
     ui->messageBoxClient->clear();
 }
 
+void ClientSideDialog::keyPressEvent(QKeyEvent *event) {
+    /* check if the user pressed ENTER */
+    if((event->key() == Qt::Key_Enter) || (event->key() == Qt::Key_Return)) {
+        this->on_sendMsgBtnClient_clicked();
+    }
+}

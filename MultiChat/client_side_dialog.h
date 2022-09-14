@@ -43,6 +43,8 @@ private slots:
 
 private:
     void reject();
+
+    void keyPressEvent(QKeyEvent* event);
 };
 
 /* listen the server messages */
