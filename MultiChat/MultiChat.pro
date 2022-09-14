@@ -16,6 +16,7 @@ SOURCES += \
     ip_port_dialog.cpp \
     main.cpp \
     main_dialog.cpp \
+    mute_list.cpp \
     nickname_dialog.cpp \
     options_server_dialog.cpp \
     server.cpp \
@@ -27,6 +28,7 @@ HEADERS += \
     client_side_dialog.h \
     ip_port_dialog.h \
     main_dialog.h \
+    mute_list.h \
     nickname_dialog.h \
     options_server_dialog.h \
     server.h \
@@ -36,6 +38,7 @@ FORMS += \
     client_side_dialog.ui \
     ip_port_dialog.ui \
     main_dialog.ui \
+    mute_list.ui \
     nickname_dialog.ui \
     options_server_dialog.ui \
     server_side_dialog.ui

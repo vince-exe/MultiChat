@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MuteList</class>
+ <widget class="QDialog" name="MuteList">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>328</width>
+    <height>371</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Multi Chat</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QDialog {
+background-color: '#0d3d4c';
+}</string>
+  </property>
+  <widget class="QLabel" name="lineLabel">
+   <property name="geometry">
+    <rect>
+     <x>65</x>
+     <y>70</y>
+     <width>201</width>
+     <height>4</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLabel {
+	background-color: '#101014';
+	border-radius: 2px;
+}</string>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="titleLabel">
+   <property name="geometry">
+    <rect>
+     <x>55</x>
+     <y>20</y>
+     <width>221</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLabel {
+	font: 700 30pt &quot;Yu Gothic UI&quot;;
+	letter-spacing: 1px;
+	color: '#e3e3e3';
+}</string>
+   </property>
+   <property name="text">
+    <string>Multi Chat</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QTableView" name="mutedTable">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>90</y>
+     <width>271</width>
+     <height>211</height>
+    </rect>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::ClickFocus</enum>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QTableView {
+background-color: '#0d3d4c';
+border: 5px solid  '#101014';
+gridline-color:  '#1a1818';
+selection-background-color: rgb(84, 13, 43);
+letter-spacing: 1.1px;
+font: 700 15pt &quot;Yu Gothic UI&quot;;
+}
+QHeaderView::section {
+border-color:  '#101014';
+color: '#e3e3e3';
+font: 700 19pt &quot;Yu Gothic UI&quot;;
+background-color: '#0d3d4c';
+height: 65px;
+}
+
+QTableView::item{
+background-color: '#0d3d4c';
+color: '#e3e3e3';
+font: 700 15pt &quot;Yu Gothic UI&quot;;
+}
+
+QTableView::item:selected {
+background-color: rgb(102, 16, 53);
+}</string>
+   </property>
+   <property name="verticalScrollBarPolicy">
+    <enum>Qt::ScrollBarAlwaysOff</enum>
+   </property>
+   <property name="horizontalScrollBarPolicy">
+    <enum>Qt::ScrollBarAlwaysOff</enum>
+   </property>
+   <property name="sizeAdjustPolicy">
+    <enum>QAbstractScrollArea::AdjustToContents</enum>
+   </property>
+   <property name="editTriggers">
+    <set>QAbstractItemView::NoEditTriggers</set>
+   </property>
+   <property name="gridStyle">
+    <enum>Qt::SolidLine</enum>
+   </property>
+   <attribute name="verticalHeaderVisible">
+    <bool>true</bool>
+   </attribute>
+  </widget>
+  <widget class="QPushButton" name="unMuteBtn">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>320</y>
+     <width>101</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	border: 4px solid '#101014';
+	font: 700 14pt &quot;Yu Gothic UI&quot;;
+	letter-spacing: 1.4px;
+	color: '#e3e3e3';
+}
+
+QPushButton::hover {
+	background-color: '#0c2f3a';
+}</string>
+   </property>
+   <property name="text">
+    <string>Un-Mute</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="doneBtn">
+   <property name="geometry">
+    <rect>
+     <x>200</x>
+     <y>320</y>
+     <width>101</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton {
+	border: 4px solid '#101014';
+	font: 700 14pt &quot;Yu Gothic UI&quot;;
+	letter-spacing: 1.4px;
+	color: '#e3e3e3';
+}
+
+QPushButton::hover {
+	background-color: '#0c2f3a';
+}</string>
+   </property>
+   <property name="text">
+    <string>Done</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

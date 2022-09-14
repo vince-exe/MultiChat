@@ -10,12 +10,17 @@
 /* forms */
 #include "options_server_dialog.h"
 #include "ip_port_dialog.h"
+#include "mute_list.h"
 
 bool ServerSideDialog::isServerOpen = false;
 
 bool ServerSideDialog::guiLoaded = true;
 
 bool ServerSideDialog::serverShutdown;
+
+Server* ServerSideDialog::server;
+
+std::vector<std::string> ServerSideDialog::mutedList;
 
 void printClientList(QStandardItemModel* model, std::map<std::string, boost::asio::ip::tcp::socket*> map, QTableView* table) {
     int i = 0;
@@ -203,6 +208,7 @@ ServerSideDialog::ServerSideDialog(QWidget *parent) :
 
     /* allocate space for the server */
     this->server = new Server(IpPortDialog::ipAddress, IpPortDialog::port);
+    this->selectedUser = "..";
 }
 
 ServerSideDialog::~ServerSideDialog() {
@@ -252,15 +258,6 @@ void ServerSideDialog::on_optionsBtn_clicked() {
 
         /* close the client and return */
         client.close();
-        return;
-    }
-
-    /* Shutdown Server */
-    if(OptionsServerDialog::wantShutdown) {
-        ServerSideDialog::serverShutdown = true;
-        shutdownServer(this);
-
-        this->reject();
         return;
     }
 }
@@ -338,9 +335,30 @@ void ServerSideDialog::on_resetMsgBtn_clicked() {
     ui->messageBox->clear();
 }
 
-
+/* save the name of the selected client */
 void ServerSideDialog::on_userTable_activated(const QModelIndex &index) {
     QString clientName = index.sibling(index.row(), 0).data().toString();
-    qDebug() << clientName;
+    this->selectedUser = clientName.toStdString();
 }
 
+/* Mute Button */
+void ServerSideDialog::on_muteBtn_clicked() {
+    if(!this->server->isClient(this->selectedUser)) { return; }
+
+    /* push the user in the muted list */
+    this->mutedList.push_back(this->selectedUser);
+
+    /* send the mute message to the client */
+    boost::asio::write(*this->server->getSocketAt(this->selectedUser), boost::asio::buffer(ChatMessages::mutedMsg + ChatMessages::termCharacter));
+
+    QMessageBox::information(0, "Success", "Successfully muted the user " + QString::fromStdString(this->selectedUser));
+}
+
+/* Show the mute list menu */
+void ServerSideDialog::on_muteListBtn_clicked() {
+    MuteList muteListDialog;
+
+    muteListDialog.setModal(true);
+    muteListDialog.show();
+    muteListDialog.exec();
+}

@@ -30,10 +30,16 @@ public:
 
     std::thread acceptThread;
 
-    Server* server;
+    static Server* server;
 
     /* vector to store all the active threads */
     std::vector<std::thread> listenClientsThreads;
+
+    /* vector used to store the names of the muted clients */
+    static std::vector<std::string> mutedList;
+
+    /* used to store the selected user from the users table */
+    std::string selectedUser;
 
     static bool isServerOpen;
 
@@ -57,6 +63,10 @@ private slots:
     void on_resetMsgBtn_clicked();
 
     void on_userTable_activated(const QModelIndex &index);
+
+    void on_muteBtn_clicked();
+
+    void on_muteListBtn_clicked();
 
 private:
     void reject();

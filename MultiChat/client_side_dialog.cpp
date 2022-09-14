@@ -64,6 +64,27 @@ void listenServer(ClientSideDialog* object, Client* client) {
             return;
         }
 
+        /* if the server muted the client */
+        if(msg == ChatMessages::mutedMsg) {
+            object->isMuted = true;
+            object->ui->messageBoxClient->setPlaceholderText("You are muted!!");
+            object->ui->messageBoxClient->setReadOnly(true);
+
+            object->ui->sendMsgBtnClient->setEnabled(false);
+            object->ui->resetMsgBtnClient->setEnabled(false);
+            continue;
+        }
+
+        if(msg == ChatMessages::unMuteMsg) {
+            object->isMuted = false;
+            object->ui->messageBoxClient->setPlaceholderText("Send Message");
+            object->ui->messageBoxClient->setReadOnly(false);
+
+            object->ui->sendMsgBtnClient->setEnabled(true);
+            object->ui->resetMsgBtnClient->setEnabled(true);
+            continue;
+        }
+
         if(msg == ChatMessages::shutdownServer) {
             boost::asio::write(*client->getSocket(), boost::asio::buffer(ChatMessages::shutdownServer + ChatMessages::termCharacter));
             client->close();
@@ -111,6 +132,7 @@ ClientSideDialog::ClientSideDialog(QWidget *parent) :
     ui->userTableClient->verticalHeader()->setDefaultSectionSize(50);
 
     ui->userTableClient->setModel(this->modelUsersClient);
+    this->isMuted = false;
 }
 
 ClientSideDialog::~ClientSideDialog() {
@@ -143,6 +165,8 @@ void ClientSideDialog::ClientSideDialog::reject() {
 
 /* send the message */
 void ClientSideDialog::on_sendMsgBtnClient_clicked() {
+    if(this->isMuted) { return; }
+
     /* check that the message is not empty */
     if(!ui->messageBoxClient->text().length()) {
         return;

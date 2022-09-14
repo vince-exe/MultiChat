@@ -58,6 +58,10 @@ namespace ChatMessages {
     const std::string closeServer = "[.[ServerClose].]";
 
     const std::string shutdownServer = "[.[ServerShutdown].]";
+
+    const std::string mutedMsg = "[.[Muted].]";
+
+    const std::string unMuteMsg = "[.[UnMute].]";
 }
 
 #endif // CHAT_UTILITIES_H

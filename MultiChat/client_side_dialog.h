@@ -33,6 +33,8 @@ public:
    QStringList horizontalHeaderUsers;
    QStringList verticalHeaderUsers;
 
+   bool isMuted;
+
 private slots:
 
    void on_sendMsgBtnClient_clicked();
