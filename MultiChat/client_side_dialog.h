@@ -39,6 +39,8 @@ public:
 
    bool serverShutdown;
 
+   bool isBanned;
+
    void reject();
 
 private slots:

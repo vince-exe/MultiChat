@@ -31,7 +31,7 @@ void listenServer(ClientSideDialog* object, Client* client) {
 
     /* list of all the users */ 
     msg = ChatUtilities::read_until(client->getSocket(), ChatMessages::termCharacter);
-    clientList = NicknameDialog::deserializeClientList(msg, ChatMessages::serializationChar.c_str());
+    clientList = NicknameDialog::deserializeList(msg, ChatMessages::serializationChar.c_str());
 
     fillClientList(&clientList, object->modelUsersClient, object->ui->userTableClient);
     clientList.clear();
@@ -47,7 +47,7 @@ void listenServer(ClientSideDialog* object, Client* client) {
 
             std::string clientListStr = ChatUtilities::read_until(client->getSocket(), ChatMessages::termCharacter);
             clientListStr.resize(clientListStr.size() - 1);
-            clientList = NicknameDialog::deserializeClientList(clientListStr, ChatMessages::serializationChar.c_str());
+            clientList = NicknameDialog::deserializeList(clientListStr, ChatMessages::serializationChar.c_str());
 
             std::string connCount = ChatUtilities::read_until(client->getSocket(), ChatMessages::termCharacter);
             connCount.resize(connCount.size() - 1);
@@ -65,7 +65,7 @@ void listenServer(ClientSideDialog* object, Client* client) {
         }
 
         if(msg == ChatMessages::kickMessage) {
-            boost::asio::write(*client->getSocket(), boost::asio::buffer(ChatMessages::confirmKick + ChatMessages::termCharacter));
+            boost::asio::write(*client->getSocket(), boost::asio::buffer(ChatMessages::kickMessage + ChatMessages::termCharacter));
             object->isKicked = true;
 
             /* clear the widgets */
@@ -79,6 +79,24 @@ void listenServer(ClientSideDialog* object, Client* client) {
 
             object->ui->messageBoxClient->setReadOnly(true);
             object->ui->messageBoxClient->setPlaceholderText("You have been kicked !!");
+            return;
+        }
+
+        if(msg == ChatMessages::banMessage) {
+            boost::asio::write(*client->getSocket(), boost::asio::buffer(ChatMessages::banMessage + ChatMessages::termCharacter));
+            object->isBanned = true;
+
+            /* clear the widgets */
+            object->modelUsersClient->clear();
+            object->ui->userTableClient->setModel(object->modelUsersClient);
+
+            object->ui->chatBoxClient->clear();
+
+            object->ui->sendMsgBtnClient->setEnabled(false);
+            object->ui->resetMsgBtnClient->setEnabled(false);
+
+            object->ui->messageBoxClient->setReadOnly(true);
+            object->ui->messageBoxClient->setPlaceholderText("You have been banned !!");
             return;
         }
 
@@ -162,6 +180,7 @@ ClientSideDialog::ClientSideDialog(QWidget *parent) :
     this->isMuted = false;
     this->isKicked = false;
     this->serverShutdown = false;
+    this->isBanned = false;
 }
 
 ClientSideDialog::~ClientSideDialog() {
@@ -170,7 +189,7 @@ ClientSideDialog::~ClientSideDialog() {
 
 /* when the user wants to close the window */
 void ClientSideDialog::ClientSideDialog::reject() {
-    if(this->isKicked || this->serverShutdown) {
+    if(this->isKicked || this->serverShutdown || this->isBanned) {
         delete this->client;
         this->close(); return;
     }

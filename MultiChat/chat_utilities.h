@@ -43,7 +43,7 @@ namespace ChatMessages {
 
     const std::string connectionTest = "[.[ConnectionTest].]";
 
-    const std::string getClientList = "[.[ClientList].]";
+    const std::string checkNickBan = "[.[CheckNickBan].]";
 
     const std::string clientJoined = "[.[ClientJoined].]";
 
@@ -65,7 +65,7 @@ namespace ChatMessages {
 
     const std::string kickMessage = "[.[KickMessage].]";
 
-    const std::string confirmKick = "[.[ConfirmKick].]";
+    const std::string banMessage = "[.[BanMessage].]";
 }
 
 #endif // CHAT_UTILITIES_H

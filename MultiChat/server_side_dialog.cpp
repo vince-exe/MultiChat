@@ -22,6 +22,8 @@ Server* ServerSideDialog::server;
 
 std::vector<std::string> ServerSideDialog::mutedList;
 
+std::map<std::string, std::string> ServerSideDialog::banMap;
+
 void printClientList(QStandardItemModel* model, std::map<std::string, boost::asio::ip::tcp::socket*> map, QTableView* table) {
     int i = 0;
     for(auto&it : map) {
@@ -82,12 +84,16 @@ void acceptClients(Server* server, ServerSideDialog* object) {
             continue;
         }
 
-        if(message == ChatMessages::getClientList) {
+        if(message == ChatMessages::checkNickBan) {
             /* send the list of nicknames */
             boost::asio::write(*server->getSocketAt(""), boost::asio::buffer(server->getClientListSerialized(ChatMessages::serializationChar.c_str()) + ChatMessages::termCharacter));
+            /* send the list of the banned ip */
+
+            boost::asio::write(*server->getSocketAt(""), boost::asio::buffer(object->serializeBannedList(ChatMessages::serializationChar.c_str()) + ChatMessages::termCharacter));
             server->eraseClient("");
             continue;
         }
+
         /* send the welcome message to the other clients */
         sendToAll(server, "[ Server ] " + message + " joined the chat" + ChatMessages::termCharacter, message);
         /* send the joined message, ( when the clients receive this message they automatically request the client list updated */
@@ -134,10 +140,23 @@ void listenClient(const std::string nickname, Server* server, ServerSideDialog* 
             continue;
         }
 
-        if(message == ChatMessages::confirmKick) {
+        if(message == ChatMessages::kickMessage) {
             server->eraseClient(nickname);
 
             sendToAll(server, "[ Server ] The user " + nickname + " has been kicked" + ChatMessages::termCharacter, "");
+            sendToAll(server, ChatMessages::clientLeft + ChatMessages::termCharacter, "");
+
+            /* free the table */
+            ChatUtilities::clearQTableView(object->ui->userTable, object->modelUsers, server->getConnCount());
+            /* reprint the client list */
+            printClientList(object->modelUsers, server->getClientList(), object->ui->userTable);
+            server->setConnCount(server->getConnCount() - 1);
+            return;
+        }
+
+        if(message == ChatMessages::banMessage) {
+            server->eraseClient(nickname);
+            sendToAll(server, "[ Server ] The user " + nickname + " has been banned" + ChatMessages::termCharacter, "");
             sendToAll(server, ChatMessages::clientLeft + ChatMessages::termCharacter, "");
 
             /* free the table */
@@ -386,11 +405,36 @@ void ServerSideDialog::keyPressEvent(QKeyEvent *event) {
     }
 }
 
+/* Kick a user */
 void ServerSideDialog::on_kickBtn_clicked() {
     if(!this->server->isClient(this->selectedUser)) { return; }
 
     /* send the kick message */
     boost::asio::write(*this->server->getSocketAt(this->selectedUser), boost::asio::buffer(ChatMessages::kickMessage + ChatMessages::termCharacter));
-    QMessageBox::information(0, "Success", "Successfully muted the user " + QString::fromStdString(this->selectedUser));
+    QMessageBox::information(0, "Success", "Successfully kicked the user " + QString::fromStdString(this->selectedUser));
 }
 
+/* Ban a user */
+void ServerSideDialog::on_banBtn_clicked() {
+    if(!this->server->isClient(this->selectedUser)) { return; }
+
+    /* send the ban message */
+    boost::asio::write(*this->server->getSocketAt(this->selectedUser), boost::asio::buffer(ChatMessages::banMessage + ChatMessages::termCharacter));
+
+    boost::asio::ip::tcp::endpoint remoteEp = this->server->getSocketAt(this->selectedUser)->remote_endpoint();
+    boost::asio::ip::address remoteAd = remoteEp.address();
+
+    /* push the user inside the ban map */
+    this->banMap.insert(std::pair<std::string, std::string>(remoteAd.to_string(), this->selectedUser));
+    QMessageBox::information(0, "Success", "Successfully banned the user " + QString::fromStdString(this->selectedUser));
+}
+
+std::string ServerSideDialog::serializeBannedList(const char *c) {
+    std::string str;
+    for(auto& it : this->banMap) {
+        str.append(it.first);
+        str.append(c);
+    }
+
+    return str;
+}

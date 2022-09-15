@@ -21,7 +21,7 @@ bool NicknameDialog::checkNickName(std::vector<std::string> *vec, std::string &s
     return exist;
 }
 
-std::vector<std::string> NicknameDialog::deserializeClientList(const std::string& str, const char* dC) {
+std::vector<std::string> NicknameDialog::deserializeList(const std::string& str, const char* dC) {
     std::vector<std::string> vec;
     std::string tmp;
 
@@ -36,7 +36,7 @@ std::vector<std::string> NicknameDialog::deserializeClientList(const std::string
     return vec;
 }
 
-bool NicknameDialog::nicknameExist(std::vector<std::string>* vec, const std::string& nick) {
+bool NicknameDialog::isInVector(std::vector<std::string>* vec, const std::string& nick) {
     for(auto& str : *vec) {
         if(str == nick) { return true; }
     }
@@ -93,24 +93,41 @@ void NicknameDialog::on_doneBtn_clicked() {
     }
     NicknameDialog::nickname = ui->nickBox->text().toStdString();
 
-    /* send the message to get the client nicknames list */
-    boost::asio::write(*client.getSocket(), boost::asio::buffer(ChatMessages::getClientList + ChatMessages::termCharacter));
-    /* save the nickname list */
+    /* send the message to get the client nicknames list and the banned list of ip */
+    boost::asio::write(*client.getSocket(), boost::asio::buffer(ChatMessages::checkNickBan + ChatMessages::termCharacter));
+
     std::string nicknameList = ChatUtilities::read_until(client.getSocket(), ChatMessages::termCharacter);
     nicknameList.resize(nicknameList.size() - 1);
 
-    client.close();
+    std::string banList = ChatUtilities::read_until(client.getSocket(), ChatMessages::termCharacter);
+    banList.resize(banList.size() - 1);
 
-    /* deserialize the message and put it in a vector */
-    std::vector<std::string> nicknameListVec = NicknameDialog::deserializeClientList(nicknameList, ChatMessages::serializationChar.c_str());
-    /* check if the nick doesn't exist */
-    if(!NicknameDialog::nicknameExist(&nicknameListVec, NicknameDialog::nickname)) {
-        NicknameDialog::insertNickname = true;
-        this->close();
+    std::vector<std::string> nicknameListVec = NicknameDialog::deserializeList(nicknameList, ChatMessages::serializationChar.c_str());
+    std::vector<std::string> banListVec = NicknameDialog::deserializeList(banList, ChatMessages::serializationChar.c_str());
+
+    /* check if the nick already exist */
+    if(NicknameDialog::isInVector(&nicknameListVec, NicknameDialog::nickname)) {
+        QMessageBox::warning(0, "Warning", "This nickname already exist");
         return;
     }
 
-    QMessageBox::warning(0, "Warning", "This nickname already exist");
+    boost::asio::ip::tcp::endpoint remoteEp = client.getSocket()->remote_endpoint();
+    boost::asio::ip::address remoteAd = remoteEp.address();
+    client.close();
+
+    qDebug() << "Stringa: " << QString::fromStdString(banList) << "\n";
+    for(auto& it : banListVec) {
+        qDebug() << "\nVettore: " << QString::fromStdString(it);
+    }
+    /* check if client is banne */
+    if(NicknameDialog::isInVector(&banListVec, remoteAd.to_string())) {
+        QMessageBox::warning(0, "Warning", "You are banned from this server");
+        return;
+    }
+
+    NicknameDialog::insertNickname = true;
+    this->close();
+    return;
 }
 
 /* check the given nickname */

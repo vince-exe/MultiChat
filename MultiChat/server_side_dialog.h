@@ -38,6 +38,9 @@ public:
     /* vector used to store the names of the muted clients */
     static std::vector<std::string> mutedList;
 
+    /* map used to store the ip-addresses and the name of the banned clients */
+    static std::map<std::string, std::string> banMap;
+
     /* used to store the selected user from the users table */
     std::string selectedUser;
 
@@ -48,6 +51,10 @@ public:
     static bool serverShutdown;
 
     Ui::ServerSideDialog *ui;
+
+public:
+    /* return a serialized string that rappresent the banned list */
+    std::string serializeBannedList(const char* c);
 
 private slots:
     void on_optionsBtn_clicked();
@@ -69,6 +76,8 @@ private slots:
     void on_muteListBtn_clicked();
 
     void on_kickBtn_clicked();
+
+    void on_banBtn_clicked();
 
 private:
     void reject();

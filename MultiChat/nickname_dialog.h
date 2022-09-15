@@ -23,9 +23,9 @@ public:
 
     static bool checkNickName(std::vector<std::string>* vec, std::string& str);
 
-    static std::vector<std::string> deserializeClientList(const std::string& str, const char* dC);
+    static std::vector<std::string> deserializeList(const std::string& str, const char* dC);
 
-    static bool nicknameExist(std::vector<std::string>* vec, const std::string& nick);
+    static bool isInVector(std::vector<std::string>* vec, const std::string& nick);
 
 private slots:
     void on_cancelBtn_clicked();
