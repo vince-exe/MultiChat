@@ -62,6 +62,10 @@ namespace ChatMessages {
     const std::string mutedMsg = "[.[Muted].]";
 
     const std::string unMuteMsg = "[.[UnMute].]";
+
+    const std::string kickMessage = "[.[KickMessage].]";
+
+    const std::string confirmKick = "[.[ConfirmKick].]";
 }
 
 #endif // CHAT_UTILITIES_H

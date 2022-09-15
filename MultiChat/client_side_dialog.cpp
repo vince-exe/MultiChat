@@ -64,7 +64,24 @@ void listenServer(ClientSideDialog* object, Client* client) {
             return;
         }
 
-        /* if the server muted the client */
+        if(msg == ChatMessages::kickMessage) {
+            boost::asio::write(*client->getSocket(), boost::asio::buffer(ChatMessages::confirmKick + ChatMessages::termCharacter));
+            object->isKicked = true;
+
+            /* clear the widgets */
+            object->modelUsersClient->clear();
+            object->ui->userTableClient->setModel(object->modelUsersClient);
+
+            object->ui->chatBoxClient->clear();
+
+            object->ui->sendMsgBtnClient->setEnabled(false);
+            object->ui->resetMsgBtnClient->setEnabled(false);
+
+            object->ui->messageBoxClient->setReadOnly(true);
+            object->ui->messageBoxClient->setPlaceholderText("You have been kicked !!");
+            return;
+        }
+
         if(msg == ChatMessages::mutedMsg) {
             object->isMuted = true;
             object->ui->messageBoxClient->setPlaceholderText("You are muted!!");
@@ -88,9 +105,19 @@ void listenServer(ClientSideDialog* object, Client* client) {
         if(msg == ChatMessages::shutdownServer) {
             boost::asio::write(*client->getSocket(), boost::asio::buffer(ChatMessages::shutdownServer + ChatMessages::termCharacter));
             client->close();
+            object->serverShutdown = true;
 
-            QMessageBox::information(0, "Info", "The server has been closed");
-            object->close();
+            /* clear the widgets */
+            object->modelUsersClient->clear();
+            object->ui->userTableClient->setModel(object->modelUsersClient);
+
+            object->ui->chatBoxClient->clear();
+
+            object->ui->sendMsgBtnClient->setEnabled(false);
+            object->ui->resetMsgBtnClient->setEnabled(false);
+
+            object->ui->messageBoxClient->setReadOnly(true);
+            object->ui->messageBoxClient->setPlaceholderText("Server Shutdown !!");
             return;
         }
 
@@ -130,9 +157,11 @@ ClientSideDialog::ClientSideDialog(QWidget *parent) :
     ui->userTableClient->setSelectionMode(QAbstractItemView::NoSelection);
     ui->userTableClient->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->userTableClient->verticalHeader()->setDefaultSectionSize(50);
-
     ui->userTableClient->setModel(this->modelUsersClient);
+
     this->isMuted = false;
+    this->isKicked = false;
+    this->serverShutdown = false;
 }
 
 ClientSideDialog::~ClientSideDialog() {
@@ -141,6 +170,11 @@ ClientSideDialog::~ClientSideDialog() {
 
 /* when the user wants to close the window */
 void ClientSideDialog::ClientSideDialog::reject() {
+    if(this->isKicked || this->serverShutdown) {
+        delete this->client;
+        this->close(); return;
+    }
+
     /* check if the user wants to exit */
     QMessageBox confirmBox;
     confirmBox.setText(tr("If you close this window, you will bel disconnected from the chat, are you sure?"));
@@ -158,8 +192,10 @@ void ClientSideDialog::ClientSideDialog::reject() {
     if(this->listenThread.joinable()) {
         this->listenThread.join();
     }
-    /* close the client and dealloc the socket */
+    /* close the client and dealloc the socket and client pointers*/
     client->close();
+    delete this->client;
+
     QDialog::reject();
 }
 
@@ -184,7 +220,6 @@ void ClientSideDialog::on_sendMsgBtnClient_clicked() {
     /* clear the text box */
     ui->messageBoxClient->clear();
 }
-
 
 void ClientSideDialog::on_resetMsgBtnClient_clicked() {
     ui->messageBoxClient->clear();

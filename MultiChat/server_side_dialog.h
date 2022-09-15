@@ -68,6 +68,8 @@ private slots:
 
     void on_muteListBtn_clicked();
 
+    void on_kickBtn_clicked();
+
 private:
     void reject();
 

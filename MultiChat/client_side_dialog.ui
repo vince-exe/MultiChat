@@ -126,36 +126,11 @@ QLineEdit::hover {
     <string>Send Message</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="muteBtnClient">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>50</y>
-     <width>121</width>
-     <height>61</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">QPushButton {
-	border: 5px solid '#101014';
-	font: 700 17pt &quot;Yu Gothic UI&quot;;
-	letter-spacing: 1px;
-	color: '#e3e3e3';
-}
-
-QPushButton::hover {
-	background-color: '#0c2f3a';
-}</string>
-   </property>
-   <property name="text">
-    <string>mute</string>
-   </property>
-  </widget>
   <widget class="QPushButton" name="optionsBtnClient">
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>510</y>
+     <y>400</y>
      <width>121</width>
      <height>61</height>
     </rect>
@@ -205,7 +180,7 @@ QPushButton::hover {
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>340</y>
+     <y>160</y>
      <width>121</width>
      <height>61</height>
     </rect>
@@ -224,56 +199,6 @@ QPushButton::hover {
    </property>
    <property name="text">
     <string>info user</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="kickBtnClient">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>150</y>
-     <width>121</width>
-     <height>61</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">QPushButton {
-	border: 5px solid '#101014';
-	font: 700 17pt &quot;Yu Gothic UI&quot;;
-	letter-spacing: 1px;
-	color: '#e3e3e3';
-}
-
-QPushButton::hover {
-	background-color: '#0c2f3a';
-}</string>
-   </property>
-   <property name="text">
-    <string>kick</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="banBtnClient">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>250</y>
-     <width>121</width>
-     <height>61</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">QPushButton {
-	border: 5px solid '#101014';
-	font: 700 17pt &quot;Yu Gothic UI&quot;;
-	letter-spacing: 1px;
-	color: '#e3e3e3';
-}
-
-QPushButton::hover {
-	background-color: '#0c2f3a';
-}</string>
-   </property>
-   <property name="text">
-    <string>ban</string>
    </property>
   </widget>
   <widget class="QPushButton" name="sendMsgBtnClient">
@@ -305,7 +230,7 @@ QPushButton::hover {
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>430</y>
+     <y>280</y>
      <width>121</width>
      <height>61</height>
     </rect>

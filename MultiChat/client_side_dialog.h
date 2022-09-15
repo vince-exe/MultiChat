@@ -35,6 +35,12 @@ public:
 
    bool isMuted;
 
+   bool isKicked;
+
+   bool serverShutdown;
+
+   void reject();
+
 private slots:
 
    void on_sendMsgBtnClient_clicked();
@@ -42,7 +48,7 @@ private slots:
    void on_resetMsgBtnClient_clicked();
 
 private:
-    void reject();
+
 
     void keyPressEvent(QKeyEvent* event);
 };

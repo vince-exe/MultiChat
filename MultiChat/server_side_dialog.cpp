@@ -134,6 +134,20 @@ void listenClient(const std::string nickname, Server* server, ServerSideDialog* 
             continue;
         }
 
+        if(message == ChatMessages::confirmKick) {
+            server->eraseClient(nickname);
+
+            sendToAll(server, "[ Server ] The user " + nickname + " has been kicked" + ChatMessages::termCharacter, "");
+            sendToAll(server, ChatMessages::clientLeft + ChatMessages::termCharacter, "");
+
+            /* free the table */
+            ChatUtilities::clearQTableView(object->ui->userTable, object->modelUsers, server->getConnCount());
+            /* reprint the client list */
+            printClientList(object->modelUsers, server->getClientList(), object->ui->userTable);
+            server->setConnCount(server->getConnCount() - 1);
+            return;
+        }
+
         if(message == ChatMessages::clientDisconnect) {
             boost::asio::write(*socketClient, boost::asio::buffer(ChatMessages::acceptClientDisconnection + ChatMessages::termCharacter));
             /* deallocate the socket */
@@ -315,6 +329,7 @@ void ServerSideDialog::ServerSideDialog::reject() {
     if(confirmBox.clickedButton() == noBtn) { return; }
 
     shutdownServer(this);
+    delete this->server;
     this->close();
 }
 
@@ -370,3 +385,12 @@ void ServerSideDialog::keyPressEvent(QKeyEvent *event) {
         this->on_sendMsgBtn_clicked();
     }
 }
+
+void ServerSideDialog::on_kickBtn_clicked() {
+    if(!this->server->isClient(this->selectedUser)) { return; }
+
+    /* send the kick message */
+    boost::asio::write(*this->server->getSocketAt(this->selectedUser), boost::asio::buffer(ChatMessages::kickMessage + ChatMessages::termCharacter));
+    QMessageBox::information(0, "Success", "Successfully muted the user " + QString::fromStdString(this->selectedUser));
+}
+

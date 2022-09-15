@@ -37,12 +37,13 @@ void MainDialog::on_createBtn_clicked() {
 
     if(!IpPortDialog::doneBtnPressed) { return; }
 
-    ServerSideDialog serverSideDialog;
+    this->serverSideDialog = new ServerSideDialog;
 
-    serverSideDialog.show();
-    serverSideDialog.exec();
+    serverSideDialog->show();
+    serverSideDialog->exec();
 
     if(ServerSideDialog::serverShutdown) {
+        delete this->serverSideDialog;
         this->close(); return;
     }
 }
@@ -64,9 +65,9 @@ void MainDialog::on_connectBtn_clicked() {
 
     if(!NicknameDialog::insertNickname) { return; }
 
-    ClientSideDialog clientSideDialog;
+    this->clientSideDialog = new ClientSideDialog;
 
-    clientSideDialog.show();
-    clientSideDialog.exec();
+    clientSideDialog->show();
+    clientSideDialog->exec();
 }
 
