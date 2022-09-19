@@ -76,7 +76,6 @@ void acceptClients(Server* server, ServerSideDialog* object) {
             sendToAll(server, ChatMessages::shutdownServer + ChatMessages::termCharacter, "");
             server->eraseClient("");
             server->shutdown();
-            qDebug() << "ok1";
             return;
         }
 
@@ -129,7 +128,6 @@ void listenClient(const std::string nickname, Server* server, ServerSideDialog* 
 
         if(message == ChatMessages::shutdownServer) {
             server->eraseClient(nickname);
-            qDebug() << "ok2";
             return;
         }
 
