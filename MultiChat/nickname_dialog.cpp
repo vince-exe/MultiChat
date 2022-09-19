@@ -115,11 +115,7 @@ void NicknameDialog::on_doneBtn_clicked() {
     boost::asio::ip::address remoteAd = remoteEp.address();
     client.close();
 
-    qDebug() << "Stringa: " << QString::fromStdString(banList) << "\n";
-    for(auto& it : banListVec) {
-        qDebug() << "\nVettore: " << QString::fromStdString(it);
-    }
-    /* check if client is banne */
+    /* check if client is banned */
     if(NicknameDialog::isInVector(&banListVec, remoteAd.to_string())) {
         QMessageBox::warning(0, "Warning", "You are banned from this server");
         return;

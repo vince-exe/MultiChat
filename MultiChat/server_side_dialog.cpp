@@ -11,6 +11,7 @@
 #include "options_server_dialog.h"
 #include "ip_port_dialog.h"
 #include "mute_list.h"
+#include "ban_list_dialog.h"
 
 bool ServerSideDialog::isServerOpen = false;
 
@@ -75,6 +76,7 @@ void acceptClients(Server* server, ServerSideDialog* object) {
             sendToAll(server, ChatMessages::shutdownServer + ChatMessages::termCharacter, "");
             server->eraseClient("");
             server->shutdown();
+            qDebug() << "ok1";
             return;
         }
 
@@ -127,6 +129,7 @@ void listenClient(const std::string nickname, Server* server, ServerSideDialog* 
 
         if(message == ChatMessages::shutdownServer) {
             server->eraseClient(nickname);
+            qDebug() << "ok2";
             return;
         }
 
@@ -158,6 +161,9 @@ void listenClient(const std::string nickname, Server* server, ServerSideDialog* 
             server->eraseClient(nickname);
             sendToAll(server, "[ Server ] The user " + nickname + " has been banned" + ChatMessages::termCharacter, "");
             sendToAll(server, ChatMessages::clientLeft + ChatMessages::termCharacter, "");
+
+            /* remove the client from the list */
+            server->eraseClient(object->selectedUser);
 
             /* free the table */
             ChatUtilities::clearQTableView(object->ui->userTable, object->modelUsers, server->getConnCount());
@@ -337,7 +343,10 @@ void shutdownServer(ServerSideDialog *object) {
 /* when the user wants to close the window */
 void ServerSideDialog::ServerSideDialog::reject() {
     QMessageBox confirmBox;
+
+    ServerSideDialog::isServerOpen = true;
     ServerSideDialog::serverShutdown = true;
+    this->server->open();
 
     confirmBox.setText(tr("The application will proceed with shutdown the server, are you sure?"));
     confirmBox.addButton(tr("Yes"), QMessageBox::YesRole);
@@ -421,20 +430,31 @@ void ServerSideDialog::on_banBtn_clicked() {
     /* send the ban message */
     boost::asio::write(*this->server->getSocketAt(this->selectedUser), boost::asio::buffer(ChatMessages::banMessage + ChatMessages::termCharacter));
 
+    /* get the ip address of the selected user */
     boost::asio::ip::tcp::endpoint remoteEp = this->server->getSocketAt(this->selectedUser)->remote_endpoint();
     boost::asio::ip::address remoteAd = remoteEp.address();
 
     /* push the user inside the ban map */
-    this->banMap.insert(std::pair<std::string, std::string>(remoteAd.to_string(), this->selectedUser));
+    this->banMap.insert(std::pair<std::string, std::string>(this->selectedUser, remoteAd.to_string()));
+
     QMessageBox::information(0, "Success", "Successfully banned the user " + QString::fromStdString(this->selectedUser));
 }
 
 std::string ServerSideDialog::serializeBannedList(const char *c) {
     std::string str;
     for(auto& it : this->banMap) {
-        str.append(it.first);
+        str.append(it.second);
         str.append(c);
     }
 
     return str;
 }
+
+/* Show The Ban List */
+void ServerSideDialog::on_banListBtn_clicked() {
+    BanListDialog banListDialog;
+    banListDialog.setModal(true);
+    banListDialog.show();
+    banListDialog.exec();
+}
+

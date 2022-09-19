@@ -79,6 +79,8 @@ private slots:
 
     void on_banBtn_clicked();
 
+    void on_banListBtn_clicked();
+
 private:
     void reject();
 
