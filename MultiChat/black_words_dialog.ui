@@ -84,9 +84,9 @@ font: 700 15pt &quot;Yu Gothic UI&quot;;
 QHeaderView::section {
 border-color:  '#101014';
 color: '#e3e3e3';
-font: 700 19pt &quot;Yu Gothic UI&quot;;
+font: 700 12pt &quot;Yu Gothic UI&quot;;
 background-color: '#0d3d4c';
-height: 65px;
+height: 35px;
 }
 
 QTableView::item{

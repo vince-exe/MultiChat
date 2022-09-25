@@ -2,6 +2,7 @@
 #define BLACK_WORDS_DIALOG_H
 
 #include <QDialog>
+#include <QStandardItemModel>
 
 namespace Ui {
 class BlackWordsDialog;
@@ -16,6 +17,11 @@ public:
     ~BlackWordsDialog();
 
     static bool updtAddWord;
+
+    QStandardItemModel* blackWordsModel;
+
+    QStringList horizontalHeader;
+    QStringList verticalHeader;
 
 private slots:
     void on_updtWord_clicked();

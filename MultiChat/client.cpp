@@ -1,7 +1,7 @@
 #include "client.h"
 
 Client::Client() {}
-
+#include <QDebug>
 bool Client::connect(const std::string& ipAddress, int port) {
     /* allocate space for the socket */
     this->socketClient = new boost::asio::ip::tcp::socket(this->io_context);

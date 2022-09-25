@@ -16,6 +16,22 @@ BlackWordsDialog::BlackWordsDialog(QWidget *parent) :
     this->setWindowIcon(QIcon("images/mainIcon.png"));
 
     BlackWordsDialog::updtAddWord = false;
+
+    /* alloc the QStandardItemModels */
+    this->blackWordsModel = new QStandardItemModel();
+    this->horizontalHeader.append("BlackWords");
+
+    /* set the models */
+    this->blackWordsModel->setHorizontalHeaderLabels(this->horizontalHeader);
+    this->blackWordsModel->setVerticalHeaderLabels(this->verticalHeader);
+
+    /* table settings */
+    ui->blackWordsTable->verticalHeader()->setVisible(false);
+    ui->blackWordsTable->setSelectionMode(QAbstractItemView::NoSelection);
+    ui->blackWordsTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->blackWordsTable->verticalHeader()->setDefaultSectionSize(25);
+
+    ui->blackWordsTable->setModel(this->blackWordsModel);
 }
 
 BlackWordsDialog::~BlackWordsDialog() {

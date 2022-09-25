@@ -76,8 +76,8 @@ void acceptClients(Server* server, ServerSideDialog* object) {
 
         if(message == ChatMessages::shutdownServer) {
             /* warn all the users */
-            sendToAll(server, ChatMessages::shutdownServer + ChatMessages::termCharacter, "");
             server->eraseClient("");
+            sendToAll(server, ChatMessages::shutdownServer + ChatMessages::termCharacter, "");
             server->shutdown();
             return;
         }
@@ -345,8 +345,6 @@ void shutdownServer(ServerSideDialog *object) {
 void ServerSideDialog::ServerSideDialog::reject() {
     QMessageBox confirmBox;
 
-    ServerSideDialog::isServerOpen = true;
-    ServerSideDialog::serverShutdown = true;
     this->server->open();
 
     confirmBox.setText(tr("The application will proceed with shutdown the server, are you sure?"));
@@ -356,6 +354,10 @@ void ServerSideDialog::ServerSideDialog::reject() {
     /* show the message box */
     confirmBox.exec();
     if(confirmBox.clickedButton() == noBtn) { return; }
+
+    if(ServerSideDialog::guiLoaded) {
+        this->close(); return;
+    }
 
     shutdownServer(this);
     delete this->server;
