@@ -24,14 +24,15 @@ namespace ChatUtilities {
     /* clear the given QTableView from it widgets */
     void clearQTableView(QTableView* table, QStandardItemModel* model, int max);
 
-    /* max lenght for a nickname */
     const int maxNickLenght = 16;
 
-    /* min lenght for nickname */
     const int minNickLenght = 5;
 
-    /* max lenght for the port */
     const int minPortLen = 3;
+
+    const int maxBlackWordLen = 10;
+
+    const int minBlackWordLen = 1;
 }
 
 namespace ChatMessages {

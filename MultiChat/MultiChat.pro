@@ -11,6 +11,8 @@ CONFIG += static
 
 SOURCES += \
     ban_list_dialog.cpp \
+    black_word_dialog_helper.cpp \
+    black_words_dialog.cpp \
     chat_utilities.cpp \
     client.cpp \
     client_side_dialog.cpp \
@@ -25,6 +27,8 @@ SOURCES += \
 
 HEADERS += \
     ban_list_dialog.h \
+    black_word_dialog_helper.h \
+    black_words_dialog.h \
     chat_utilities.h \
     client.h \
     client_side_dialog.h \
@@ -38,6 +42,8 @@ HEADERS += \
 
 FORMS += \
     ban_list_dialog.ui \
+    black_word_dialog_helper.ui \
+    black_words_dialog.ui \
     client_side_dialog.ui \
     ip_port_dialog.ui \
     main_dialog.ui \

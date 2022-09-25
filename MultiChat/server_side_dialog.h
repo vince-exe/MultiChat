@@ -41,6 +41,9 @@ public:
     /* map used to store the ip-addresses and the name of the banned clients */
     static std::map<std::string, std::string> banMap;
 
+    /* vector used to store the banned words */
+    static std::vector<std::string> blackWordsVec;
+
     /* used to store the selected user from the users table */
     std::string selectedUser;
 
@@ -80,6 +83,8 @@ private slots:
     void on_banBtn_clicked();
 
     void on_banListBtn_clicked();
+
+    void on_blackWordsBtn_clicked();
 
 private:
     void reject();

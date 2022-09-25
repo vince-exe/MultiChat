@@ -12,6 +12,7 @@
 #include "ip_port_dialog.h"
 #include "mute_list.h"
 #include "ban_list_dialog.h"
+#include "black_words_dialog.h"
 
 bool ServerSideDialog::isServerOpen = false;
 
@@ -24,6 +25,8 @@ Server* ServerSideDialog::server;
 std::vector<std::string> ServerSideDialog::mutedList;
 
 std::map<std::string, std::string> ServerSideDialog::banMap;
+
+std::vector<std::string> ServerSideDialog::blackWordsVec;
 
 void printClientList(QStandardItemModel* model, std::map<std::string, boost::asio::ip::tcp::socket*> map, QTableView* table) {
     int i = 0;
@@ -456,3 +459,10 @@ void ServerSideDialog::on_banListBtn_clicked() {
     banListDialog.exec();
 }
 
+/* Open the black words menu */
+void ServerSideDialog::on_blackWordsBtn_clicked() {
+    BlackWordsDialog blackWordsDialog;
+    blackWordsDialog.setModal(true);
+    blackWordsDialog.show();
+    blackWordsDialog.exec();
+}
