@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include <QStandardItemModel>
+#include "chat_utilities.h"
 
 namespace Ui {
 class BlackWordsDialog;
@@ -30,6 +31,7 @@ private slots:
 
     void on_deleteWord_clicked();
 
+    void printBlackWordsList(std::vector<std::string>* vec);
 private:
     Ui::BlackWordsDialog *ui;
 };

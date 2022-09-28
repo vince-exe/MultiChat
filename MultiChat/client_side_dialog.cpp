@@ -8,6 +8,8 @@
 #include "chat_utilities.h"
 #include "nickname_dialog.h"
 
+std::vector<std::string> ClientSideDialog::blackWordsVec;
+
 void fillClientList(std::vector<std::string>* vec, QStandardItemModel* model, QTableView* table) {
     int i = 0;
     for(auto& str : *vec) {
@@ -36,6 +38,14 @@ void listenServer(ClientSideDialog* object, Client* client) {
     fillClientList(&clientList, object->modelUsersClient, object->ui->userTableClient);
     clientList.clear();
 
+    /* list of the black words */
+    msg = ChatUtilities::read_until(client->getSocket(), ChatMessages::termCharacter);
+    ClientSideDialog::blackWordsVec = NicknameDialog::deserializeList(msg, ChatMessages::serializationChar.c_str());
+
+    for(auto& it : ClientSideDialog::blackWordsVec) {
+        qDebug() << QString::fromStdString(it);
+    }
+
     /* start listen the server */
     while(true) {
         msg = ChatUtilities::read_until(client->getSocket(), ChatMessages::termCharacter);
@@ -62,6 +72,18 @@ void listenServer(ClientSideDialog* object, Client* client) {
 
         if(msg == ChatMessages::acceptClientDisconnection) {
             return;
+        }
+
+        if(msg == ChatMessages::blackListMsg) {
+            /* request the black words list */
+            boost::asio::write(*client->getSocket(), boost::asio::buffer(ChatMessages::blackListMsg + ChatMessages::termCharacter));
+
+            std::string blackListStr = ChatUtilities::read_until(client->getSocket(), ChatMessages::termCharacter);
+            blackListStr.resize(blackListStr.size() - 1);
+
+            ClientSideDialog::blackWordsVec.clear();
+            ClientSideDialog::blackWordsVec = NicknameDialog::deserializeList(blackListStr, ChatMessages::serializationChar.c_str());
+            continue;
         }
 
         if(msg == ChatMessages::kickMessage) {

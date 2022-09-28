@@ -1,7 +1,11 @@
 #include "black_word_dialog_helper.h"
 #include "ui_black_word_dialog_helper.h"
 
+#include <QMessageBox>
+
 #include "chat_utilities.h"
+#include "nickname_dialog.h"
+#include "server_side_dialog.h"
 
 bool BlackWordDialogHelper::doneBtnPressed;
 
@@ -31,6 +35,11 @@ void BlackWordDialogHelper::on_doneBtn_clicked() {
     BlackWordDialogHelper::boxString = ui->blackWordBox->text().toStdString();
 
     if(boxString.length() < ChatUtilities::minBlackWordLen) { return; }
+
+    if(NicknameDialog::isInVector(&ServerSideDialog::blackWordsVec, BlackWordDialogHelper::boxString)) {
+        QMessageBox::warning(0, "Warning", "This black word already exist");
+        return;
+    }
 
     BlackWordDialogHelper::doneBtnPressed = true;
     this->close();

@@ -33,6 +33,8 @@ public:
    QStringList horizontalHeaderUsers;
    QStringList verticalHeaderUsers;
 
+   static std::vector<std::string> blackWordsVec;
+
    bool isMuted;
 
    bool isKicked;

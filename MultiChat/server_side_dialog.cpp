@@ -92,7 +92,6 @@ void acceptClients(Server* server, ServerSideDialog* object) {
             /* send the list of nicknames */
             boost::asio::write(*server->getSocketAt(""), boost::asio::buffer(server->getClientListSerialized(ChatMessages::serializationChar.c_str()) + ChatMessages::termCharacter));
             /* send the list of the banned ip */
-
             boost::asio::write(*server->getSocketAt(""), boost::asio::buffer(object->serializeBannedList(ChatMessages::serializationChar.c_str()) + ChatMessages::termCharacter));
             server->eraseClient("");
             continue;
@@ -123,6 +122,9 @@ void listenClient(const std::string nickname, Server* server, ServerSideDialog* 
 
     /* send the client list */
     boost::asio::write(*socketClient, boost::asio::buffer(server->getClientListSerialized(ChatMessages::serializationChar.c_str()) + ChatMessages::termCharacter));
+
+    /* send the black words list */
+    boost::asio::write(*socketClient, boost::asio::buffer(object->serializeBlackWordsList(ChatMessages::serializationChar.c_str()) + ChatMessages::termCharacter));
 
     while(true) {
         /* read the content */
@@ -172,6 +174,12 @@ void listenClient(const std::string nickname, Server* server, ServerSideDialog* 
             printClientList(object->modelUsers, server->getClientList(), object->ui->userTable);
             server->setConnCount(server->getConnCount() - 1);
             return;
+        }
+
+        if(message == ChatMessages::blackListMsg) {
+            /* send the black words list */
+            boost::asio::write(*socketClient, boost::asio::buffer(object->serializeBlackWordsList(ChatMessages::serializationChar.c_str()) + ChatMessages::termCharacter));
+            continue;
         }
 
         if(message == ChatMessages::clientDisconnect) {
@@ -453,6 +461,16 @@ std::string ServerSideDialog::serializeBannedList(const char *c) {
     return str;
 }
 
+std::string ServerSideDialog::serializeBlackWordsList(const char *c) {
+    std::string str;
+    for(auto& it : this->blackWordsVec) {
+        str.append(it);
+        str.append(c);
+    }
+
+    return str;
+}
+
 /* Show The Ban List */
 void ServerSideDialog::on_banListBtn_clicked() {
     BanListDialog banListDialog;
@@ -467,4 +485,9 @@ void ServerSideDialog::on_blackWordsBtn_clicked() {
     blackWordsDialog.setModal(true);
     blackWordsDialog.show();
     blackWordsDialog.exec();
+
+    /* if the user added or updated a black word, send the message to the clients */
+    if(BlackWordsDialog::updtAddWord) {
+        sendToAll(this->server, ChatMessages::blackListMsg + ChatMessages::termCharacter, "");
+    }
 }

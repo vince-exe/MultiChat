@@ -12,9 +12,6 @@ namespace ChatUtilities {
     /* read message from a socket */
     std::string read_until(boost::asio::ip::tcp::socket* socket, const std::string& del);
 
-    /* send a message to a socket ( std::vector ) */
-    void sendStdVet(boost::asio::ip::tcp::socket* socket, std::vector<std::string>* vec);
-
     /* count how many times the character appears in the string */
     bool checkStringCharacter(const QString& string, const char* c, int maxCount);
 
@@ -67,6 +64,8 @@ namespace ChatMessages {
     const std::string kickMessage = "[.[KickMessage].]";
 
     const std::string banMessage = "[.[BanMessage].]";
+
+    const std::string blackListMsg = "[.[BlackList].]";
 }
 
 #endif // CHAT_UTILITIES_H

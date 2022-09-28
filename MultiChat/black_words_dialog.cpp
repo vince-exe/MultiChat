@@ -3,6 +3,7 @@
 
 #include "server_side_dialog.h"
 #include "black_word_dialog_helper.h"
+#include "chat_utilities.h"
 
 bool BlackWordsDialog::updtAddWord;
 
@@ -29,9 +30,10 @@ BlackWordsDialog::BlackWordsDialog(QWidget *parent) :
     ui->blackWordsTable->verticalHeader()->setVisible(false);
     ui->blackWordsTable->setSelectionMode(QAbstractItemView::NoSelection);
     ui->blackWordsTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    ui->blackWordsTable->verticalHeader()->setDefaultSectionSize(25);
+    ui->blackWordsTable->verticalHeader()->setDefaultSectionSize(35);
 
     ui->blackWordsTable->setModel(this->blackWordsModel);
+    this->printBlackWordsList(&ServerSideDialog::blackWordsVec);
 }
 
 BlackWordsDialog::~BlackWordsDialog() {
@@ -52,11 +54,23 @@ void BlackWordsDialog::on_addWord_clicked() {
 
     if(!BlackWordDialogHelper::doneBtnPressed) { return; }
 
-    qDebug() << QString::fromStdString(BlackWordDialogHelper::boxString);
+    /* add the black word to the black words list */
+    ServerSideDialog::blackWordsVec.push_back(BlackWordDialogHelper::boxString);
+    ChatUtilities::clearQTableView(ui->blackWordsTable, this->blackWordsModel, ServerSideDialog::blackWordsVec.size() - 1);
+    this->printBlackWordsList(&ServerSideDialog::blackWordsVec);
     BlackWordsDialog::updtAddWord = true;
 }
 
 /* Delete a Black Word */
 void BlackWordsDialog::on_deleteWord_clicked() {
 
+}
+
+void BlackWordsDialog::printBlackWordsList(std::vector<std::string> *vec) {
+    int i = 0;
+    for(auto&it : *vec) {
+        this->blackWordsModel->setItem(i, ChatUtilities::getItem(QString::fromStdString(it)));
+        i++;
+    }
+    this->ui->blackWordsTable->setModel(this->blackWordsModel);
 }

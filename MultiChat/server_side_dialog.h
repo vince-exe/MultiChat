@@ -59,6 +59,9 @@ public:
     /* return a serialized string that rappresent the banned list */
     std::string serializeBannedList(const char* c);
 
+    /* return a string that contain all the black words serialized */
+    std::string serializeBlackWordsList(const char* c);
+
 private slots:
     void on_optionsBtn_clicked();
 
