@@ -42,10 +42,6 @@ void listenServer(ClientSideDialog* object, Client* client) {
     msg = ChatUtilities::read_until(client->getSocket(), ChatMessages::termCharacter);
     ClientSideDialog::blackWordsVec = NicknameDialog::deserializeList(msg, ChatMessages::serializationChar.c_str());
 
-    for(auto& it : ClientSideDialog::blackWordsVec) {
-        qDebug() << QString::fromStdString(it);
-    }
-
     /* start listen the server */
     while(true) {
         msg = ChatUtilities::read_until(client->getSocket(), ChatMessages::termCharacter);
@@ -209,6 +205,19 @@ ClientSideDialog::~ClientSideDialog() {
     delete ui;
 }
 
+bool ClientSideDialog::isBlackWord(std::vector<std::string> *vec, std::string str) {
+    int k;
+    for(auto& it : *vec ) {
+        k = 0;
+        for(int i = 0; i < str.length(); i++) {
+            if(str[i] == it[k]) { k++; }
+
+            if(k == it.length()) { return true; }
+        }
+    }
+    return false;
+}
+
 /* when the user wants to close the window */
 void ClientSideDialog::ClientSideDialog::reject() {
     if(this->isKicked || this->serverShutdown || this->isBanned) {
@@ -248,6 +257,11 @@ void ClientSideDialog::on_sendMsgBtnClient_clicked() {
     if(!ui->messageBoxClient->text().length()) {
         return;
     }
+    /* check that the users doesn't send a message that contains a blackword */
+    if(ClientSideDialog::isBlackWord(&ClientSideDialog::blackWordsVec, ui->messageBoxClient->text().toStdString())) {
+        ui->messageBoxClient->setStyleSheet("QLineEdit { border: 4px solid '#101014'; font: 700 12pt 'Yu Gothic UI'; letter-spacing: 2px; color: rgb(125, 0, 0); background-color: '#0d3d4c'; padding-left: 13px; } QLineEdit::hover { background-color: '#0c2f3a'; }");
+        return;
+    }
 
     std::string msg = ui->messageBoxClient->text().toStdString();
     /* send the content to the server */
@@ -272,3 +286,8 @@ void ClientSideDialog::keyPressEvent(QKeyEvent *event) {
         this->on_sendMsgBtnClient_clicked();
     }
 }
+
+void ClientSideDialog::on_messageBoxClient_textChanged(const QString &arg1) {
+    ui->messageBoxClient->setStyleSheet("QLineEdit { border: 4px solid '#101014'; font: 700 12pt 'Yu Gothic UI'; letter-spacing: 2px; color: '#e3e3e3'; background-color: '#0d3d4c'; padding-left: 13px; } QLineEdit::hover { background-color: '#0c2f3a'; }");
+}
+

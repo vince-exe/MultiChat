@@ -60,6 +60,14 @@ void acceptClients(Server* server, ServerSideDialog* object) {
         /* remove the term character */
         message.resize(message.size() - 1);
 
+        if(message == ChatMessages::shutdownServer) {
+            /* warn all the users */
+            server->eraseClient("");
+            sendToAll(server, ChatMessages::shutdownServer + ChatMessages::termCharacter, "");
+            server->shutdown();
+            return;
+        }
+
         /* check if the server is open */
         if(!server->isOpen()) {
             boost::asio::write(*server->getSocketAt(""), boost::asio::buffer(ChatMessages::closeServer + ChatMessages::termCharacter));
@@ -72,14 +80,6 @@ void acceptClients(Server* server, ServerSideDialog* object) {
             server->eraseClient("");
             server->stop();
             continue;
-        }
-
-        if(message == ChatMessages::shutdownServer) {
-            /* warn all the users */
-            server->eraseClient("");
-            sendToAll(server, ChatMessages::shutdownServer + ChatMessages::termCharacter, "");
-            server->shutdown();
-            return;
         }
 
         if(message == ChatMessages::connectionTest) {
@@ -328,8 +328,6 @@ void ServerSideDialog::on_searchUserBox_textChanged(const QString &arg1) {
 }
 
 void shutdownServer(ServerSideDialog *object) {
-    if(!object->isServerOpen) { return; }
-
     /* create a temp client to shutdown the connection */
     Client client;
 
@@ -352,9 +350,6 @@ void shutdownServer(ServerSideDialog *object) {
 /* when the user wants to close the window */
 void ServerSideDialog::ServerSideDialog::reject() {
     QMessageBox confirmBox;
-
-    this->server->open();
-
     confirmBox.setText(tr("The application will proceed with shutdown the server, are you sure?"));
     confirmBox.addButton(tr("Yes"), QMessageBox::YesRole);
 
@@ -363,10 +358,11 @@ void ServerSideDialog::ServerSideDialog::reject() {
     confirmBox.exec();
     if(confirmBox.clickedButton() == noBtn) { return; }
 
-    if(ServerSideDialog::guiLoaded) {
+    if(ServerSideDialog::guiLoaded && !server->getConnCount()) {
         this->close(); return;
     }
 
+    this->server->open();
     shutdownServer(this);
     delete this->server;
     this->close();
