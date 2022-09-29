@@ -26,6 +26,8 @@ private slots:
 
     void on_blackWordBox_textChanged(const QString &arg1);
 
+    void keyPressEvent(QKeyEvent* event);
+
 private:
     Ui::BlackWordDialogHelper *ui;
 };

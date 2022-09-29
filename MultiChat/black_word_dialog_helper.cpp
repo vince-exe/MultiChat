@@ -2,6 +2,7 @@
 #include "ui_black_word_dialog_helper.h"
 
 #include <QMessageBox>
+#include <QKeyEvent>
 
 #include "chat_utilities.h"
 #include "nickname_dialog.h"
@@ -52,4 +53,11 @@ void BlackWordDialogHelper::on_doneBtn_clicked() {
 
 void BlackWordDialogHelper::on_blackWordBox_textChanged(const QString &arg1) {
     if(arg1.length() > ChatUtilities::maxBlackWordLen) { ui->blackWordBox->backspace(); }
+}
+
+void BlackWordDialogHelper::keyPressEvent(QKeyEvent *event) {
+    /* check if the user pressed ENTER */
+    if((event->key() == Qt::Key_Enter) || (event->key() == Qt::Key_Return)) {
+        this->on_doneBtn_clicked();
+    }
 }

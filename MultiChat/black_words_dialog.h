@@ -38,6 +38,7 @@ private slots:
     void on_deleteWord_clicked();
 
     void printBlackWordsList(std::vector<std::string>* vec);
+
     void on_blackWordsTable_activated(const QModelIndex &index);
 
 private:

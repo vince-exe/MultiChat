@@ -1,6 +1,8 @@
 #include "black_words_dialog.h"
 #include "ui_black_words_dialog.h"
 
+#include <QKeyEvent>
+
 #include "server_side_dialog.h"
 #include "black_word_dialog_helper.h"
 #include "chat_utilities.h"
@@ -92,7 +94,15 @@ void BlackWordsDialog::on_addWord_clicked() {
 
 /* Delete a Black Word */
 void BlackWordsDialog::on_deleteWord_clicked() {
+    if(!NicknameDialog::isInVector(&ServerSideDialog::blackWordsVec, BlackWordsDialog::selectedWord)) { return; }
 
+    ServerSideDialog::blackWordsVec.erase(std::remove(ServerSideDialog::blackWordsVec.begin(), ServerSideDialog::blackWordsVec.end(), BlackWordsDialog::selectedWord));
+    ChatUtilities::clearQTableView(ui->blackWordsTable, this->blackWordsModel, ServerSideDialog::blackWordsVec.size() + 1);
+
+    ui->blackWordsTable->setModel(this->blackWordsModel);
+    this->printBlackWordsList(&ServerSideDialog::blackWordsVec);
+
+    BlackWordsDialog::updtAddWord = true;
 }
 
 void BlackWordsDialog::printBlackWordsList(std::vector<std::string> *vec) {

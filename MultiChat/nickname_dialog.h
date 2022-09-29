@@ -34,6 +34,8 @@ private slots:
 
     void on_nickBox_textChanged(const QString &arg1);
 
+    void keyPressEvent(QKeyEvent* event);
+
 private:
     Ui::NicknameDialog *ui;
 };

@@ -92,6 +92,7 @@ background-color: rgb(102, 16, 53);
 	font: 700 14pt &quot;Yu Gothic UI&quot;;
 	color: '#e3e3e3';
 	background-color: '#0d3d4c';
+	padding-left: 10px;
 }
 </string>
    </property>

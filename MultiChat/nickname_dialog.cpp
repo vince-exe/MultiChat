@@ -6,6 +6,7 @@
 #include "ip_port_dialog.h"
 
 #include <QMessageBox>
+#include <QKeyEvent>
 
 std::string NicknameDialog::nickname;
 
@@ -131,5 +132,12 @@ void NicknameDialog::on_nickBox_textChanged(const QString &arg1) {
     /* check the max lenght */
     if(arg1.length() > ChatUtilities::maxNickLenght) {
         ui->nickBox->backspace(); return;
+    }
+}
+
+void NicknameDialog::keyPressEvent(QKeyEvent *event) {
+    /* check if the user pressed ENTER */
+    if((event->key() == Qt::Key_Enter) || (event->key() == Qt::Key_Return)) {
+        this->on_doneBtn_clicked();
     }
 }
