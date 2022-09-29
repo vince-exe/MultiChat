@@ -6,6 +6,7 @@
 #include "chat_utilities.h"
 #include "nickname_dialog.h"
 #include "server_side_dialog.h"
+#include "black_words_dialog.h"
 
 bool BlackWordDialogHelper::doneBtnPressed;
 
@@ -20,6 +21,9 @@ BlackWordDialogHelper::BlackWordDialogHelper(QWidget *parent) :
     /* set the window icon */
     this->setWindowIcon(QIcon("images/mainIcon.png"));
 
+    if(BlackWordsDialog::uptWord) {
+        ui->blackWordBox->setText(QString::fromStdString(BlackWordsDialog::selectedWord));
+    }
     BlackWordDialogHelper::doneBtnPressed = false;
 }
 

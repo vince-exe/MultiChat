@@ -19,6 +19,12 @@ public:
 
     static bool updtAddWord;
 
+    static bool uptWord;
+
+    static std::string selectedWord;
+
+    static int selectedRow;
+
     QStandardItemModel* blackWordsModel;
 
     QStringList horizontalHeader;
@@ -32,6 +38,8 @@ private slots:
     void on_deleteWord_clicked();
 
     void printBlackWordsList(std::vector<std::string>* vec);
+    void on_blackWordsTable_activated(const QModelIndex &index);
+
 private:
     Ui::BlackWordsDialog *ui;
 };

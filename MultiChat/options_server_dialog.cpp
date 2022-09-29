@@ -14,6 +14,10 @@ OptionsServerDialog::OptionsServerDialog(QWidget *parent) :
     ui(new Ui::OptionsServerDialog) {
     ui->setupUi(this);
 
+    this->setWindowFlags(Qt::Window | Qt::MSWindowsFixedSizeDialogHint);
+    /* set the window icon */
+    this->setWindowIcon(QIcon("images/mainIcon.png"));
+
     OptionsServerDialog::serverOpened = false;
     OptionsServerDialog::wantToCLose = false;
 }
