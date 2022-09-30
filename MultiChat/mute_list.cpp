@@ -60,6 +60,9 @@ void MuteList::printMutedList(std::vector<std::string> *vec) {
 void MuteList::on_unMuteBtn_clicked() {
     if(!ServerSideDialog::server->isClient(this->selectedUser)) { return; }
 
+    auto& it = ServerSideDialog::statsMap.at(this->selectedUser);
+    it.setMuted(false);
+
     /* send the un-mute message */
     boost::asio::write(*ServerSideDialog::server->getSocketAt(this->selectedUser), boost::asio::buffer(ChatMessages::unMuteMsg + ChatMessages::termCharacter));
     /* erase the element from the muted list */

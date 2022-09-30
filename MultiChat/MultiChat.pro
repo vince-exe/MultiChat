@@ -16,6 +16,8 @@ SOURCES += \
     chat_utilities.cpp \
     client.cpp \
     client_side_dialog.cpp \
+    client_stats_manager.cpp \
+    info_user_dialog.cpp \
     ip_port_dialog.cpp \
     main.cpp \
     main_dialog.cpp \
@@ -32,6 +34,8 @@ HEADERS += \
     chat_utilities.h \
     client.h \
     client_side_dialog.h \
+    client_stats_manager.h \
+    info_user_dialog.h \
     ip_port_dialog.h \
     main_dialog.h \
     mute_list.h \
@@ -45,6 +49,7 @@ FORMS += \
     black_word_dialog_helper.ui \
     black_words_dialog.ui \
     client_side_dialog.ui \
+    info_user_dialog.ui \
     ip_port_dialog.ui \
     main_dialog.ui \
     mute_list.ui \

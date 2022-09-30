@@ -13,6 +13,9 @@
 #include "mute_list.h"
 #include "ban_list_dialog.h"
 #include "black_words_dialog.h"
+#include "info_user_dialog.h"
+
+#include "nickname_dialog.h"
 
 bool ServerSideDialog::isServerOpen = false;
 
@@ -20,11 +23,15 @@ bool ServerSideDialog::guiLoaded = true;
 
 bool ServerSideDialog::serverShutdown;
 
+std::string ServerSideDialog::selectedUser;
+
 Server* ServerSideDialog::server;
 
 std::vector<std::string> ServerSideDialog::mutedList;
 
 std::map<std::string, std::string> ServerSideDialog::banMap;
+
+std::map<std::string, ClientStatsManager> ServerSideDialog::statsMap;
 
 std::vector<std::string> ServerSideDialog::blackWordsVec;
 
@@ -116,6 +123,8 @@ void acceptClients(Server* server, ServerSideDialog* object) {
 }
 
 void listenClient(const std::string nickname, Server* server, ServerSideDialog* object) {
+    ServerSideDialog::statsMap.insert(std::pair<std::string, ClientStatsManager>(nickname, ClientStatsManager(0, 0, false)));
+
     /* get the client socket */
     boost::asio::ip::tcp::socket* socketClient = server->getSocketAt(nickname);
     std::string message;
@@ -126,12 +135,16 @@ void listenClient(const std::string nickname, Server* server, ServerSideDialog* 
     /* send the black words list */
     boost::asio::write(*socketClient, boost::asio::buffer(object->serializeBlackWordsList(ChatMessages::serializationChar.c_str()) + ChatMessages::termCharacter));
 
+    /* iterator used to increase the num of messages of the user */
+    auto& clientStatsIt = ServerSideDialog::statsMap.at(nickname);
+
     while(true) {
         /* read the content */
         message = ChatUtilities::read_until(socketClient, ChatMessages::termCharacter);
         message.resize(message.size() - 1);
 
         if(message == ChatMessages::shutdownServer) {
+            ServerSideDialog::statsMap.erase(nickname);
             server->eraseClient(nickname);
             return;
         }
@@ -147,6 +160,7 @@ void listenClient(const std::string nickname, Server* server, ServerSideDialog* 
         }
 
         if(message == ChatMessages::kickMessage) {
+            ServerSideDialog::statsMap.erase(nickname);
             server->eraseClient(nickname);
 
             sendToAll(server, "[ Server ] The user " + nickname + " has been kicked" + ChatMessages::termCharacter, "");
@@ -161,6 +175,8 @@ void listenClient(const std::string nickname, Server* server, ServerSideDialog* 
         }
 
         if(message == ChatMessages::banMessage) {
+            ServerSideDialog::statsMap.erase(nickname);
+
             server->eraseClient(nickname);
             sendToAll(server, "[ Server ] The user " + nickname + " has been banned" + ChatMessages::termCharacter, "");
             sendToAll(server, ChatMessages::clientLeft + ChatMessages::termCharacter, "");
@@ -183,6 +199,8 @@ void listenClient(const std::string nickname, Server* server, ServerSideDialog* 
         }
 
         if(message == ChatMessages::clientDisconnect) {
+            ServerSideDialog::statsMap.erase(nickname);
+
             boost::asio::write(*socketClient, boost::asio::buffer(ChatMessages::acceptClientDisconnection + ChatMessages::termCharacter));
             /* deallocate the socket */
             server->eraseClient(nickname);
@@ -207,6 +225,7 @@ void listenClient(const std::string nickname, Server* server, ServerSideDialog* 
 
         /* send the message to the other clients */
         sendToAll(server, "[ " + nickname + " ] " + message + ChatMessages::termCharacter, nickname);
+        clientStatsIt.setNMsgs(clientStatsIt.getMsgs() + 1);
     }
 }
 
@@ -395,8 +414,17 @@ void ServerSideDialog::on_userTable_activated(const QModelIndex &index) {
 void ServerSideDialog::on_muteBtn_clicked() {
     if(!this->server->isClient(this->selectedUser)) { return; }
 
+    if(NicknameDialog::isInVector(&ServerSideDialog::mutedList, this->selectedUser)) {
+        QMessageBox::warning(0, "Warning", "This user is already muted");
+        return;
+    }
+
     /* push the user in the muted list */
     this->mutedList.push_back(this->selectedUser);
+
+    auto& it = ServerSideDialog::statsMap.at(this->selectedUser);
+    it.setNMutes(it.getMutes() + 1);
+    it.setMuted(true);
 
     /* send the mute message to the client */
     boost::asio::write(*this->server->getSocketAt(this->selectedUser), boost::asio::buffer(ChatMessages::mutedMsg + ChatMessages::termCharacter));
@@ -487,3 +515,12 @@ void ServerSideDialog::on_blackWordsBtn_clicked() {
         sendToAll(this->server, ChatMessages::blackListMsg + ChatMessages::termCharacter, "");
     }
 }
+
+/* info user */
+void ServerSideDialog::on_infoUsrBtn_clicked() {
+    InfoUserDialog infoUserDialog;
+    infoUserDialog.setModal(true);
+    infoUserDialog.show();
+    infoUserDialog.exec();
+}
+

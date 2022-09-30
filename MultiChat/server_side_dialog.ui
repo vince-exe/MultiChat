@@ -435,7 +435,7 @@ QPushButton::hover {
 	font: 700 12pt &quot;Yu Gothic UI&quot;;
 	color: rgb(189, 189, 189);
 	background-color: '#0d3d4c';
-	padding-left: 10px;
+	padding-left: 6px;
 }
 </string>
    </property>

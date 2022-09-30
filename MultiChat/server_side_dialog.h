@@ -10,6 +10,7 @@
 #include <thread>
 
 #include "server.h"
+#include "client_stats_manager.h"
 
 namespace Ui {
 class ServerSideDialog;
@@ -41,11 +42,14 @@ public:
     /* map used to store the ip-addresses and the name of the banned clients */
     static std::map<std::string, std::string> banMap;
 
+    /* map used to store the info of a client */
+    static std::map<std::string, ClientStatsManager> statsMap;
+
     /* vector used to store the banned words */
     static std::vector<std::string> blackWordsVec;
 
     /* used to store the selected user from the users table */
-    std::string selectedUser;
+    static std::string selectedUser;
 
     static bool isServerOpen;
 
@@ -88,6 +92,8 @@ private slots:
     void on_banListBtn_clicked();
 
     void on_blackWordsBtn_clicked();
+
+    void on_infoUsrBtn_clicked();
 
 private:
     void reject();
