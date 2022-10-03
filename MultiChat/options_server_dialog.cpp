@@ -3,6 +3,9 @@
 
 #include "server_side_dialog.h"
 
+/* forms */
+#include "path_helper_dialog.h"
+
 #include <QMessageBox>
 
 bool OptionsServerDialog::serverOpened;
@@ -51,9 +54,35 @@ void OptionsServerDialog::on_closeServerBtn_clicked() {
 }
 
 void OptionsServerDialog::on_backupChatBtn_clicked() {
+    PathHelperDialog pathHelperDialog;
+    pathHelperDialog.setModal(true);
+    pathHelperDialog.show();
+    pathHelperDialog.exec();
 
+    if(PathHelperDialog::pathOpened) {
+        qDebug() << QString::fromStdString(PathHelperDialog::selectedPath);
+    }
 }
 
+/* Create a file at the given path, that contains the list of all the users */
 void OptionsServerDialog::on_backupUsersBtn_clicked() {
+    PathHelperDialog pathHelperDialog;
+    pathHelperDialog.setModal(true);
+    pathHelperDialog.show();
+    pathHelperDialog.exec();
 
+    if(PathHelperDialog::pathOpened) {
+        qDebug() << QString::fromStdString(PathHelperDialog::selectedPath);
+    }
+}
+
+void OptionsServerDialog::on_backupWordsBtn_clicked() {
+    PathHelperDialog pathHelperDialog;
+    pathHelperDialog.setModal(true);
+    pathHelperDialog.show();
+    pathHelperDialog.exec();
+
+    if(PathHelperDialog::pathOpened) {
+        qDebug() << QString::fromStdString(PathHelperDialog::selectedPath);
+    }
 }

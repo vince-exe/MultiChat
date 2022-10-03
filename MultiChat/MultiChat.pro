@@ -24,6 +24,7 @@ SOURCES += \
     mute_list.cpp \
     nickname_dialog.cpp \
     options_server_dialog.cpp \
+    path_helper_dialog.cpp \
     server.cpp \
     server_side_dialog.cpp
 
@@ -41,6 +42,7 @@ HEADERS += \
     mute_list.h \
     nickname_dialog.h \
     options_server_dialog.h \
+    path_helper_dialog.h \
     server.h \
     server_side_dialog.h
 
@@ -55,6 +57,7 @@ FORMS += \
     mute_list.ui \
     nickname_dialog.ui \
     options_server_dialog.ui \
+    path_helper_dialog.ui \
     server_side_dialog.ui
 
 INCLUDEPATH += D:/Programs/C++Libraries/boost_1_80_0

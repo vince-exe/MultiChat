@@ -28,6 +28,8 @@ private slots:
 
     void on_backupUsersBtn_clicked();
 
+    void on_backupWordsBtn_clicked();
+
 private:
     Ui::OptionsServerDialog *ui;
 };
