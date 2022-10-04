@@ -3,6 +3,8 @@
 
 #include "server_side_dialog.h"
 
+#include <fstream>
+
 /* forms */
 #include "path_helper_dialog.h"
 
@@ -27,6 +29,25 @@ OptionsServerDialog::OptionsServerDialog(QWidget *parent) :
 
 OptionsServerDialog::~OptionsServerDialog() {
     delete ui;
+}
+
+void OptionsServerDialog::writeIntoFile(std::ofstream& f, std::vector<std::string> *vec) {
+    f << "List of the users that were in the char the " + this->currentDateTime();
+    for(auto& str : *vec) {
+        str.append("\n");
+        f << str;
+    }
+}
+
+const std::string OptionsServerDialog::currentDateTime() {
+    time_t now = time(0);
+    struct tm tstruct;
+    char buf[80];
+    tstruct = *localtime(&now);
+
+    strftime(buf, sizeof(buf), "%d-%m-%Y.%X", &tstruct);
+
+    return buf;
 }
 
 void OptionsServerDialog::on_startServerBtn_clicked() {
@@ -66,14 +87,40 @@ void OptionsServerDialog::on_backupChatBtn_clicked() {
 
 /* Create a file at the given path, that contains the list of all the users */
 void OptionsServerDialog::on_backupUsersBtn_clicked() {
+    /* take the path */
     PathHelperDialog pathHelperDialog;
     pathHelperDialog.setModal(true);
     pathHelperDialog.show();
     pathHelperDialog.exec();
 
-    if(PathHelperDialog::pathOpened) {
-        qDebug() << QString::fromStdString(PathHelperDialog::selectedPath);
+    if(!PathHelperDialog::pathOpened) { return; }
+
+    /* store all the names in a vector */
+    std::vector<std::string> tmpVec;
+    for(auto& key : ServerSideDialog::server->getClientList()) {
+        tmpVec.push_back(key.first);
     }
+    QString finalPath = QString::fromStdString(PathHelperDialog::selectedPath).replace("/", "\\");
+
+    QString time = QString::fromStdString(this->currentDateTime());
+    time.replace(":", "-");
+
+    if(PathHelperDialog::selectedPath.length() == 3) {
+        finalPath.append(QString::fromStdString("BackupUsers" + time.toStdString() + ".txt"));
+    }
+    else {
+        finalPath.append(QString::fromStdString("\\BackupUsers" + time.toStdString() + ".txt"));
+    }
+    std::ofstream f(finalPath.toStdString());
+    if(!f.is_open()) {
+        QMessageBox::critical(0, "Error", "The application failed to save the list of users");
+        return;
+    }
+
+    this->writeIntoFile(f, &tmpVec);
+    f.close();
+
+    QMessageBox::information(0, "Success", "Successfully saved the users list");
 }
 
 void OptionsServerDialog::on_backupWordsBtn_clicked() {
