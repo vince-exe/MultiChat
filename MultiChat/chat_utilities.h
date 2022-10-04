@@ -27,7 +27,7 @@ namespace ChatUtilities {
 
     const int minPortLen = 3;
 
-    const int maxBlackWordLen = 10;
+    const int maxBlackWordLen = 17;
 
     const int minBlackWordLen = 1;
 }

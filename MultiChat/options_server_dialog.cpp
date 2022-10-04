@@ -32,7 +32,6 @@ OptionsServerDialog::~OptionsServerDialog() {
 }
 
 void OptionsServerDialog::writeIntoFile(std::ofstream& f, std::vector<std::string> *vec) {
-    f << "List of the users that were in the char the " + this->currentDateTime();
     for(auto& str : *vec) {
         str.append("\n");
         f << str;
@@ -111,12 +110,15 @@ void OptionsServerDialog::on_backupUsersBtn_clicked() {
     else {
         finalPath.append(QString::fromStdString("\\BackupUsers" + time.toStdString() + ".txt"));
     }
+
     std::ofstream f(finalPath.toStdString());
+
     if(!f.is_open()) {
         QMessageBox::critical(0, "Error", "The application failed to save the list of users");
         return;
     }
 
+    f << "List of the users that were in the chat the " + this->currentDateTime() << std::endl;
     this->writeIntoFile(f, &tmpVec);
     f.close();
 
@@ -129,7 +131,29 @@ void OptionsServerDialog::on_backupWordsBtn_clicked() {
     pathHelperDialog.show();
     pathHelperDialog.exec();
 
-    if(PathHelperDialog::pathOpened) {
-        qDebug() << QString::fromStdString(PathHelperDialog::selectedPath);
+    if(!PathHelperDialog::pathOpened) { return; }
+
+    QString finalPath = QString::fromStdString(PathHelperDialog::selectedPath).replace("/", "\\");
+
+    QString time = QString::fromStdString(this->currentDateTime());
+    time.replace(":", "-");
+
+    if(PathHelperDialog::selectedPath.length() == 3) {
+        finalPath.append(QString::fromStdString("BackupBlackWords" + time.toStdString() + ".txt"));
     }
+    else {
+        finalPath.append(QString::fromStdString("\\BackupBlackWords" + time.toStdString() + ".txt"));
+    }
+
+    std::ofstream f(finalPath.toStdString());
+    if(!f.is_open()) {
+        QMessageBox::critical(0, "Error", "The application failed to save the list of users");
+        return;
+    }
+
+    f << "List of the black words that were in the black list of the server the " + this->currentDateTime() << std::endl;
+    this->writeIntoFile(f, &ServerSideDialog::blackWordsVec);
+    f.close();
+
+    QMessageBox::information(0, "Success", "Successfully saved the black words list");
 }
