@@ -19,9 +19,9 @@ public:
 
     static bool wantToCLose;
 
-    void writeIntoFile(std::ofstream& f, std::vector<std::string> *vec);
-
     const std::string currentDateTime();
+
+    static QString chatBox;
 
 private slots:
     void on_startServerBtn_clicked();

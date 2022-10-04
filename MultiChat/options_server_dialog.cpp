@@ -9,10 +9,13 @@
 #include "path_helper_dialog.h"
 
 #include <QMessageBox>
+#include <QRegularExpression>
 
 bool OptionsServerDialog::serverOpened;
 
 bool OptionsServerDialog::wantToCLose;
+
+QString OptionsServerDialog::chatBox;
 
 OptionsServerDialog::OptionsServerDialog(QWidget *parent) :
     QDialog(parent),
@@ -29,13 +32,6 @@ OptionsServerDialog::OptionsServerDialog(QWidget *parent) :
 
 OptionsServerDialog::~OptionsServerDialog() {
     delete ui;
-}
-
-void OptionsServerDialog::writeIntoFile(std::ofstream& f, std::vector<std::string> *vec) {
-    for(auto& str : *vec) {
-        str.append("\n");
-        f << str;
-    }
 }
 
 const std::string OptionsServerDialog::currentDateTime() {
@@ -79,9 +75,37 @@ void OptionsServerDialog::on_backupChatBtn_clicked() {
     pathHelperDialog.show();
     pathHelperDialog.exec();
 
-    if(PathHelperDialog::pathOpened) {
-        qDebug() << QString::fromStdString(PathHelperDialog::selectedPath);
+    if(!PathHelperDialog::pathOpened) { return; }
+
+    QStringList list = this->chatBox.split(QRegularExpression("[\n]"));
+
+    QString finalPath = QString::fromStdString(PathHelperDialog::selectedPath).replace("/", "\\");
+
+    QString time = QString::fromStdString(this->currentDateTime());
+    time.replace(":", "-");
+
+    if(PathHelperDialog::selectedPath.length() == 3) {
+        finalPath.append(QString::fromStdString("BackupChat" + time.toStdString() + ".txt"));
     }
+    else {
+        finalPath.append(QString::fromStdString("\\BackupChat" + time.toStdString() + ".txt"));
+    }
+
+    std::ofstream f(finalPath.toStdString());
+
+    if(!f.is_open()) {
+        QMessageBox::critical(0, "Error", "The application failed to save the chat");
+        return;
+    }
+
+    f << "List of the chat the " + this->currentDateTime() << std::endl;
+    for(auto& word : list) {
+        f << word.toStdString() << std::endl;
+    }
+    f.close();
+
+    QMessageBox::information(0, "Success", "Successfully saved the chat");
+    qDebug() << list;
 }
 
 /* Create a file at the given path, that contains the list of all the users */
@@ -94,11 +118,6 @@ void OptionsServerDialog::on_backupUsersBtn_clicked() {
 
     if(!PathHelperDialog::pathOpened) { return; }
 
-    /* store all the names in a vector */
-    std::vector<std::string> tmpVec;
-    for(auto& key : ServerSideDialog::server->getClientList()) {
-        tmpVec.push_back(key.first);
-    }
     QString finalPath = QString::fromStdString(PathHelperDialog::selectedPath).replace("/", "\\");
 
     QString time = QString::fromStdString(this->currentDateTime());
@@ -118,8 +137,10 @@ void OptionsServerDialog::on_backupUsersBtn_clicked() {
         return;
     }
 
-    f << "List of the users that were in the chat the " + this->currentDateTime() << std::endl;
-    this->writeIntoFile(f, &tmpVec);
+    f << "List of the users that were in the chat the " + this->currentDateTime();
+    for(auto& key : ServerSideDialog::server->getClientList()) {
+        f << key.first << std::endl;
+    }
     f.close();
 
     QMessageBox::information(0, "Success", "Successfully saved the users list");
@@ -152,7 +173,9 @@ void OptionsServerDialog::on_backupWordsBtn_clicked() {
     }
 
     f << "List of the black words that were in the black list of the server the " + this->currentDateTime() << std::endl;
-    this->writeIntoFile(f, &ServerSideDialog::blackWordsVec);
+    for(auto& str : ServerSideDialog::blackWordsVec) {
+        f << str << std::endl;
+    }
     f.close();
 
     QMessageBox::information(0, "Success", "Successfully saved the black words list");

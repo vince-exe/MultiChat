@@ -289,6 +289,8 @@ ServerSideDialog::~ServerSideDialog() {
 
 /* Options Button */
 void ServerSideDialog::on_optionsBtn_clicked() {
+    OptionsServerDialog::chatBox = this->ui->chatBox->toPlainText();
+
     OptionsServerDialog optServerDialog;
     optServerDialog.setModal(true);
     optServerDialog.show();
