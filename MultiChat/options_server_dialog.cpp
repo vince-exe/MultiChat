@@ -98,7 +98,7 @@ void OptionsServerDialog::on_backupChatBtn_clicked() {
         return;
     }
 
-    f << "List of the chat the " + this->currentDateTime() << std::endl;
+    f << "Backup chat at the " + this->currentDateTime() << std::endl;
     for(auto& word : list) {
         f << word.toStdString() << std::endl;
     }

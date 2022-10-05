@@ -95,6 +95,8 @@ private slots:
 
     void on_infoUsrBtn_clicked();
 
+    void on_infoBtn_clicked();
+
 private:
     void reject();
 

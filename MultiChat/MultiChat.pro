@@ -17,6 +17,7 @@ SOURCES += \
     client.cpp \
     client_side_dialog.cpp \
     client_stats_manager.cpp \
+    info_server_dialog.cpp \
     info_user_dialog.cpp \
     ip_port_dialog.cpp \
     main.cpp \
@@ -36,6 +37,7 @@ HEADERS += \
     client.h \
     client_side_dialog.h \
     client_stats_manager.h \
+    info_server_dialog.h \
     info_user_dialog.h \
     ip_port_dialog.h \
     main_dialog.h \
@@ -51,6 +53,7 @@ FORMS += \
     black_word_dialog_helper.ui \
     black_words_dialog.ui \
     client_side_dialog.ui \
+    info_server_dialog.ui \
     info_user_dialog.ui \
     ip_port_dialog.ui \
     main_dialog.ui \

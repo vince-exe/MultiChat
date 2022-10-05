@@ -14,6 +14,7 @@
 #include "ban_list_dialog.h"
 #include "black_words_dialog.h"
 #include "info_user_dialog.h"
+#include "info_server_dialog.h"
 
 #include "nickname_dialog.h"
 
@@ -524,5 +525,12 @@ void ServerSideDialog::on_infoUsrBtn_clicked() {
     infoUserDialog.setModal(true);
     infoUserDialog.show();
     infoUserDialog.exec();
+}
+
+void ServerSideDialog::on_infoBtn_clicked() {
+    InfoServerDialog infoServerDialog;
+    infoServerDialog.setModal(true);
+    infoServerDialog.show();
+    infoServerDialog.exec();
 }
 
