@@ -61,6 +61,8 @@ private slots:
 
    void on_userTableClient_activated(const QModelIndex &index);
 
+   void on_infoBtnClient_clicked();
+
 private:
 
 

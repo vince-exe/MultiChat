@@ -10,6 +10,7 @@
 
 /* forms */
 #include "info_user_dialog.h"
+#include "info_server_dialog.h"
 #include "server_side_dialog.h"
 
 std::vector<std::string> ClientSideDialog::blackWordsVec;
@@ -297,6 +298,11 @@ void ClientSideDialog::on_messageBoxClient_textChanged(const QString &arg1) {
     ui->messageBoxClient->setStyleSheet("QLineEdit { border: 4px solid '#101014'; font: 700 12pt 'Yu Gothic UI'; letter-spacing: 2px; color: '#e3e3e3'; background-color: '#0d3d4c'; padding-left: 13px; } QLineEdit::hover { background-color: '#0c2f3a'; }");
 }
 
+void ClientSideDialog::on_userTableClient_activated(const QModelIndex &index) {
+    QString clientName = index.sibling(index.row(), 0).data().toString();
+    this->selectedUser = clientName.toStdString();
+}
+
 /* Info User */
 void ClientSideDialog::on_infoUsrBtnClient_clicked() {
     if(!ServerSideDialog::server->isClient(this->selectedUser)) { return; }
@@ -309,8 +315,10 @@ void ClientSideDialog::on_infoUsrBtnClient_clicked() {
     infoUserDialog.exec();
 }
 
-void ClientSideDialog::on_userTableClient_activated(const QModelIndex &index) {
-    QString clientName = index.sibling(index.row(), 0).data().toString();
-    this->selectedUser = clientName.toStdString();
+/* Info Chat */
+void ClientSideDialog::on_infoBtnClient_clicked() {
+    InfoServerDialog infoServerDialog;
+    infoServerDialog.setModal(true);
+    infoServerDialog.show();
+    infoServerDialog.exec();
 }
-
