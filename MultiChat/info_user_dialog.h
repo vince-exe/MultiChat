@@ -15,6 +15,8 @@ public:
     explicit InfoUserDialog(QWidget *parent = nullptr);
     ~InfoUserDialog();
 
+    static std::string infoUser;
+
 private:
     Ui::InfoUserDialog *ui;
 };

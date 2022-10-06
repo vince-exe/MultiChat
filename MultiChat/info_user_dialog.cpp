@@ -3,6 +3,8 @@
 
 #include "server_side_dialog.h"
 
+std::string InfoUserDialog::infoUser;
+
 InfoUserDialog::InfoUserDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::InfoUserDialog) {
@@ -13,7 +15,7 @@ InfoUserDialog::InfoUserDialog(QWidget *parent) :
     /* set the window icon */
     this->setWindowIcon(QIcon("images/mainIcon.png"));
 
-    auto& clientStats = ServerSideDialog::statsMap.at(ServerSideDialog::selectedUser);
+    auto& clientStats = ServerSideDialog::statsMap.at(this->infoUser);
 
     /* fill the boxes with the user informations */
     if(clientStats.isMuted()) {
@@ -23,7 +25,7 @@ InfoUserDialog::InfoUserDialog(QWidget *parent) :
         ui->mutedLabel->setStyleSheet("background-color: rgb(125, 0, 0);");
     }
 
-    ui->nicknameBox->setText(QString::fromStdString(ServerSideDialog::selectedUser));
+    ui->nicknameBox->setText(QString::fromStdString(this->infoUser));
     ui->mutesBox->setText(QString::number(clientStats.getMutes()));
     ui->msgBox->setText(QString::number(clientStats.getMsgs()));
  }

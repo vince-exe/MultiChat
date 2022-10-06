@@ -37,6 +37,8 @@ public:
 
    static bool isBlackWord(std::vector<std::string>* vec, std::string str);
 
+   static std::string selectedUser;
+
    bool isMuted;
 
    bool isKicked;
@@ -54,6 +56,10 @@ private slots:
    void on_resetMsgBtnClient_clicked();
 
    void on_messageBoxClient_textChanged(const QString &arg1);
+
+   void on_infoUsrBtnClient_clicked();
+
+   void on_userTableClient_activated(const QModelIndex &index);
 
 private:
 

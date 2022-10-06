@@ -521,16 +521,20 @@ void ServerSideDialog::on_blackWordsBtn_clicked() {
 
 /* info user */
 void ServerSideDialog::on_infoUsrBtn_clicked() {
+    if(!ServerSideDialog::server->isClient(this->selectedUser)) { return; }
+
+    InfoUserDialog::infoUser = this->selectedUser;
+
     InfoUserDialog infoUserDialog;
     infoUserDialog.setModal(true);
     infoUserDialog.show();
     infoUserDialog.exec();
 }
 
+/* info server */
 void ServerSideDialog::on_infoBtn_clicked() {
     InfoServerDialog infoServerDialog;
     infoServerDialog.setModal(true);
     infoServerDialog.show();
     infoServerDialog.exec();
 }
-

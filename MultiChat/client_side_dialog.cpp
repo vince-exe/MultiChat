@@ -8,7 +8,13 @@
 #include "chat_utilities.h"
 #include "nickname_dialog.h"
 
+/* forms */
+#include "info_user_dialog.h"
+#include "server_side_dialog.h"
+
 std::vector<std::string> ClientSideDialog::blackWordsVec;
+
+std::string ClientSideDialog::selectedUser;
 
 void fillClientList(std::vector<std::string>* vec, QStandardItemModel* model, QTableView* table) {
     int i = 0;
@@ -289,5 +295,22 @@ void ClientSideDialog::keyPressEvent(QKeyEvent *event) {
 
 void ClientSideDialog::on_messageBoxClient_textChanged(const QString &arg1) {
     ui->messageBoxClient->setStyleSheet("QLineEdit { border: 4px solid '#101014'; font: 700 12pt 'Yu Gothic UI'; letter-spacing: 2px; color: '#e3e3e3'; background-color: '#0d3d4c'; padding-left: 13px; } QLineEdit::hover { background-color: '#0c2f3a'; }");
+}
+
+/* Info User */
+void ClientSideDialog::on_infoUsrBtnClient_clicked() {
+    if(!ServerSideDialog::server->isClient(this->selectedUser)) { return; }
+
+    InfoUserDialog::infoUser = this->selectedUser;
+
+    InfoUserDialog infoUserDialog;
+    infoUserDialog.setModal(true);
+    infoUserDialog.show();
+    infoUserDialog.exec();
+}
+
+void ClientSideDialog::on_userTableClient_activated(const QModelIndex &index) {
+    QString clientName = index.sibling(index.row(), 0).data().toString();
+    this->selectedUser = clientName.toStdString();
 }
 
