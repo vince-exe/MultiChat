@@ -104,6 +104,8 @@ void NicknameDialog::on_doneBtn_clicked() {
     banList.resize(banList.size() - 1);
 
     std::vector<std::string> nicknameListVec = NicknameDialog::deserializeList(nicknameList, ChatMessages::serializationChar.c_str());
+    nicknameListVec.push_back("Server");
+    nicknameListVec.push_back("server");
     std::vector<std::string> banListVec = NicknameDialog::deserializeList(banList, ChatMessages::serializationChar.c_str());
 
     /* check if the nick already exist */

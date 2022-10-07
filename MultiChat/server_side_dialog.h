@@ -57,6 +57,8 @@ public:
 
     static bool serverShutdown;
 
+    static bool checkSearch(std::map<std::string, boost::asio::ip::tcp::socket*> map, const std::string& clientSearched);
+
     Ui::ServerSideDialog *ui;
 
 public:

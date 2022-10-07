@@ -1,11 +1,15 @@
 #include "main_dialog.h"
 #include "ui_main_dialog.h"
 
+#include <QMessageBox>
+
 /* forms */
 #include "ip_port_dialog.h"
 #include "server_side_dialog.h"
 #include "nickname_dialog.h"
 #include "client_side_dialog.h"
+
+bool MainDialog::serverAlreadyCreated = false;
 
 MainDialog::MainDialog(QWidget *parent)
     : QDialog(parent)
@@ -28,6 +32,11 @@ MainDialog::~MainDialog() {
 }
 
 void MainDialog::on_createBtn_clicked() {
+    if(MainDialog::serverAlreadyCreated) {
+        QMessageBox::warning(0, "Warning", "You cannot have more than one server on the same machine");
+        return;
+    }
+
     IpPortDialog::enterAsServer = true;
     IpPortDialog ipPortDialog;
 
@@ -39,6 +48,7 @@ void MainDialog::on_createBtn_clicked() {
 
     this->serverSideDialog = new ServerSideDialog;
 
+    MainDialog::serverAlreadyCreated = true;
     serverSideDialog->show();
     serverSideDialog->exec();
 

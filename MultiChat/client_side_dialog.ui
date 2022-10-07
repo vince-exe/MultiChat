@@ -23,9 +23,9 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>30</y>
+     <y>60</y>
      <width>221</width>
-     <height>501</height>
+     <height>471</height>
     </rect>
    </property>
    <property name="focusPolicy">
@@ -224,6 +224,26 @@ QPushButton::hover {
    </property>
    <property name="text">
     <string>info</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="nicknameLabel">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>10</y>
+     <width>221</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLabel {
+	font: 700 17pt &quot;Yu Gothic UI&quot;;
+	letter-spacing: 1px;
+	color: '#e3e3e3';
+}</string>
+   </property>
+   <property name="text">
+    <string/>
    </property>
   </widget>
  </widget>

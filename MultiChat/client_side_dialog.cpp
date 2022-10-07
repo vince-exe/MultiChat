@@ -167,7 +167,7 @@ void listenServer(ClientSideDialog* object, Client* client) {
         /* display the message in the chat */
         QTextCursor textCursor = QTextCursor(object->ui->chatBoxClient->document());
         textCursor.movePosition(QTextCursor::End);
-        textCursor.insertText(QString::fromStdString(msg)+ "\n");
+        textCursor.insertText("[ Server ] " + QString::fromStdString(msg) + "\n");
     }
 }
 
@@ -201,6 +201,8 @@ ClientSideDialog::ClientSideDialog(QWidget *parent) :
     ui->userTableClient->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->userTableClient->verticalHeader()->setDefaultSectionSize(50);
     ui->userTableClient->setModel(this->modelUsersClient);
+
+    ui->nicknameLabel->setText("You: " + QString::fromStdString(NicknameDialog::nickname));
 
     this->isMuted = false;
     this->isKicked = false;

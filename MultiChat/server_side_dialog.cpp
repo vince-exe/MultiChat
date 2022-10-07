@@ -2,6 +2,7 @@
 #include "ui_server_side_dialog.h"
 
 #include <QMessageBox>
+#include <QPalette>
 
 #include "chat_utilities.h"
 #include "server.h"
@@ -288,6 +289,13 @@ ServerSideDialog::~ServerSideDialog() {
     delete ui;
 }
 
+bool ServerSideDialog::checkSearch(std::map<std::string, boost::asio::ip::tcp::socket*> map, const std::string &clientSearched) {
+    for(auto& it : map) {
+        if(it.first == clientSearched) { return true; }
+    }
+    return false;
+}
+
 /* Options Button */
 void ServerSideDialog::on_optionsBtn_clicked() {
     OptionsServerDialog::chatBox = this->ui->chatBox->toPlainText();
@@ -334,6 +342,8 @@ void ServerSideDialog::on_optionsBtn_clicked() {
 
 /* Search Client Button */
 void ServerSideDialog::on_searchBtn_clicked() {
+    if(!this->checkSearch(this->server->getClientList(), ui->searchUserBox->text().toStdString()) ) { return; }
+
     printSearchedClients(ui->searchUserBox->text().toStdString(), this->searchModelUsers, this->server->getClientList(), ui->userTable);
     ui->searchUserBox->clear();
 }
@@ -399,7 +409,9 @@ void ServerSideDialog::on_sendMsgBtn_clicked() {
     /* display the content to the screen */
     QTextCursor textCursor = QTextCursor(this->ui->chatBox->document());
     textCursor.movePosition(QTextCursor::End);
+
     textCursor.insertText("[ Server ] " + QString::fromStdString(msg) + "\n");
+
     this->ui->messageBox->clear();
 }
 
